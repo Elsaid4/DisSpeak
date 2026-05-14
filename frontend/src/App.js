@@ -10,7 +10,7 @@ function App() {
           Edit <code>src/App.js</code> and save to reload.
 
 
-          RINGRE BUCO
+          REXHA BUCO
         </p>
         <a
           className="App-link"
