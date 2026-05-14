@@ -50,7 +50,7 @@ public class UserService {
         }
         returnedUser = new User(
                 signInDto.getUsername(),
-//                signInDto.getPassword(),
+                signInDto.getPassword(),
                 signInDto.getFullName(),
                 Status.OFFLINE
         );
