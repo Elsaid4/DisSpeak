@@ -24,4 +24,7 @@ public class PageController {
     public String messages() {
         return "messages";
     }
+
+    @GetMapping("/login")
+    public String login() {return "login";}
 }

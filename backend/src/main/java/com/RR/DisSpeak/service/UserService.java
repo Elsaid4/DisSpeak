@@ -43,18 +43,22 @@ public class UserService {
 
     public User loadUser(SignInDto signInDto) {
         User returnedUser = null;
-        Optional<User> checkUser = userRepository.findByUsername(signInDto.getUsername());
+        Optional<User> checkUser = userRepository.findByUsernameAndPassword(signInDto.getUsername(), signInDto.getPassword());
         if (checkUser.isPresent()) {
             returnedUser = checkUser.get();
             return returnedUser;
         }
-        returnedUser = new User(
+        return null;
+    }
+
+    public User registerUser(SignInDto signInDto) {
+        return userRepository.save(new User(
                 signInDto.getUsername(),
                 signInDto.getPassword(),
                 signInDto.getFullName(),
+                signInDto.getEmail(),
                 Status.OFFLINE
-        );
-        return userRepository.save(returnedUser);
+        ));
     }
 
     public User find(int id) {

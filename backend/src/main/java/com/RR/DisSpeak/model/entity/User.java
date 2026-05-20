@@ -30,8 +30,9 @@ public class User {
     @Column(name="status")
     private Status status;
 
-    public User(String username, String fullName, String email , Status status) {
+    public User(String username,String password, String fullName, String email , Status status) {
         this.username   = username;
+        this.password    = password;
         this.fullName   = fullName;
         this.email      = email;
         this.status     = status;
