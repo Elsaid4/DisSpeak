@@ -12,12 +12,18 @@ public class Server {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private int id;
+    private Long id;
 
     @Column(name="name")
     private String name;
 
-    @Column(name="owner_id")
-    private int owner_id;
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
     //private String icon;
+
+    public Server(String name, User owner) {
+        this.name = name;
+        this.owner = owner;
+    }
 }

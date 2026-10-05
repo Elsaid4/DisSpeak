@@ -5,6 +5,8 @@ import com.RR.DisSpeak.model.entity.Channel;
 import com.RR.DisSpeak.model.entity.User;
 import com.RR.DisSpeak.repository.ChannelMessageRepository;
 import com.RR.DisSpeak.repository.ChannelRepository;
+import com.RR.DisSpeak.repository.UserRepository;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,12 @@ public class ChannelMessageService extends MessageService {
 
     @Autowired
     private ChannelRepository channelRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     /**
      * Salva un nuovo messaggio di channel
@@ -97,5 +105,23 @@ public class ChannelMessageService extends MessageService {
         List<ChannelMessage> messages = channelMessageRepository.findByChannelId(channelId);
         return messages.stream().limit(limit).toList();
     }
-}
 
+    public List<ChannelMessage> getMessagesForChannel(Long channelId) {
+        return channelMessageRepository.findByChannelId(channelId);
+    }
+
+    public ChannelMessage sendMessage(Long channelId, String content, Long userId) {
+        Channel channel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new RuntimeException("Canale non trovato: " + channelId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Utente non trovato: " + userId));
+
+        ChannelMessage message = new ChannelMessage();
+        message.setContent(content);
+        message.setChannel(channel);
+        message.setUser(user);
+        ChannelMessage savedMessage = channelMessageRepository.save(message);
+        messagingTemplate.convertAndSend("/public/channel/" + channelId, savedMessage);
+        return savedMessage;
+    }
+}

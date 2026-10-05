@@ -1,6 +1,6 @@
 package com.RR.DisSpeak.model.entity;
 
-import com.RR.DisSpeak.config.Status;
+import com.RR.DisSpeak.model.entity.enums.ChannelType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,9 @@ public class Channel {
     private Long id;
 
     private String name;
-    private String type;
+
+    @Enumerated(EnumType.STRING)
+    private ChannelType type; // TEXT, VOICE
 
     @Column(name = "is_public")
     private boolean isPublic;
@@ -25,3 +27,4 @@ public class Channel {
     @JoinColumn(name = "server_id")
     private Server server;
 }
+

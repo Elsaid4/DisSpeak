@@ -13,7 +13,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private int id;
+    private Long id;
 
     @Column(name="username")
     private String username;
@@ -32,7 +32,7 @@ public class User {
 
     public User(String username,String password, String fullName, String email , Status status) {
         this.username   = username;
-        this.password    = password;
+        this.password   = password;
         this.fullName   = fullName;
         this.email      = email;
         this.status     = status;

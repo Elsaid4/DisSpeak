@@ -11,13 +11,16 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     public User connect(User user) {
+        if (user == null || user.getId() == null) {
+            return null;
+        }
         Optional<User> checkUser = userRepository.findById(user.getId());
         if (checkUser.isPresent()) {
             User storedUser = checkUser.get();
@@ -28,6 +31,9 @@ public class UserService {
     }
 
     public User disconnect(User user) {
+        if (user == null || user.getId() == null) {
+            return null;
+        }
         Optional<User> checkUser = userRepository.findById(user.getId());
         if (checkUser.isPresent()) {
             User storedUser = checkUser.get();
@@ -42,11 +48,12 @@ public class UserService {
     }
 
     public User loadUser(SignInDto signInDto) {
-        User returnedUser = null;
+        if (signInDto == null) {
+            return null;
+        }
         Optional<User> checkUser = userRepository.findByUsernameAndPassword(signInDto.getUsername(), signInDto.getPassword());
         if (checkUser.isPresent()) {
-            returnedUser = checkUser.get();
-            return returnedUser;
+            return checkUser.get();
         }
         return null;
     }
@@ -61,12 +68,14 @@ public class UserService {
         ));
     }
 
-    public User find(int id) {
+    public User find(Long id) {
+        if (id == null) {
+            return null;
+        }
         Optional<User> checkUser = userRepository.findById(id);
         if (checkUser.isPresent()) {
             return checkUser.get();
         }
         return null;
     }
-
 }

@@ -5,54 +5,80 @@ class WebSocketService {
     constructor() {
         this.client = null;
         this.subscriptions = {};
+        this.handlers = {};
+        this.connectPromise = null;
     }
 
-    // connessione al server
-    connect(onConnected) {
-        this.client = new Client({
-            webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
-            onConnect: () => {
-                console.log('WebSocket connesso!');
-                onConnected();
-            },
-            onDisconnect: () => {
-                console.log('WebSocket disconnesso');
-            }
-        });
-
-        this.client.activate();
-    }
-
-    // iscrizione a un canale
-    subscribeToChannel(channelId, onMessage) {
-        // cancella sottoscrizione precedente se esiste
-        if (this.subscriptions[channelId]) {
-            this.subscriptions[channelId].unsubscribe();
+    connect() {
+        if (this.client?.connected) {
+            return Promise.resolve();
+        }
+        if (this.connectPromise) {
+            return this.connectPromise;
         }
 
+        this.connectPromise = new Promise((resolve, reject) => {
+            const client = new Client({
+                webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
+                reconnectDelay: 5000,
+                onConnect: () => {
+                    this.subscriptions = {};
+                    Object.entries(this.handlers).forEach(([channelId, handler]) => {
+                        this.subscribeConnectedChannel(channelId, handler);
+                    });
+                    resolve();
+                },
+                onStompError: (frame) => {
+                    reject(new Error(frame.headers.message || 'Errore WebSocket STOMP'));
+                },
+                onWebSocketError: () => {
+                    reject(new Error('Connessione WebSocket non riuscita'));
+                }
+            });
+
+            this.client = client;
+            client.activate();
+        }).finally(() => {
+            this.connectPromise = null;
+        });
+
+        return this.connectPromise;
+    }
+
+    subscribeToChannel(channelId, onMessage) {
+        const key = String(channelId);
+        this.handlers[key] = onMessage;
+        if (this.client?.connected) {
+            this.subscribeConnectedChannel(key, onMessage);
+        }
+    }
+
+    subscribeConnectedChannel(channelId, onMessage) {
+        this.subscriptions[channelId]?.unsubscribe();
         this.subscriptions[channelId] = this.client.subscribe(
-            `/topic/channel/${channelId}`,
-            (message) => {
-                onMessage(JSON.parse(message.body));
-            }
+            `/public/channel/${channelId}`,
+            (message) => onMessage(JSON.parse(message.body))
         );
     }
 
-    // invio messaggio
-    sendMessage(channelId, message) {
-        this.client.publish({
-            destination: `/app/channel/${channelId}/send`,
-            body: JSON.stringify(message)
-        });
+    unsubscribeFromChannel(channelId) {
+        const key = String(channelId);
+        this.subscriptions[key]?.unsubscribe();
+        delete this.subscriptions[key];
+        delete this.handlers[key];
     }
 
-    // disconnessione
     disconnect() {
         if (this.client) {
+            this.subscriptions = {};
+            this.handlers = {};
+            this.connectPromise = null;
             this.client.deactivate();
+            this.client = null;
         }
     }
 }
 
-// esportiamo una singola istanza condivisa
-export default new WebSocketService();
+const webSocketService = new WebSocketService();
+
+export default webSocketService;

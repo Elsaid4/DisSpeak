@@ -1,8 +1,8 @@
 package com.RR.DisSpeak.model.entity;
 
+import com.RR.DisSpeak.model.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Entity
@@ -21,5 +21,8 @@ public class ServerMembers {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String role; // "ADMIN", "MEMBER", ecc.
+
+    @Enumerated(EnumType.STRING)
+    private Role role; // ADMIN, MEMBER, MODERATOR
 }
+

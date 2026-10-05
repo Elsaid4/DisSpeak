@@ -28,4 +28,9 @@ public class ChannelMessage {
     @ManyToOne
     @JoinColumn(name = "channel_id")
     private Channel channel;
+
+    @PrePersist
+    protected void onCreate() {
+        this.timestamp = LocalDateTime.now();
+    }
 }

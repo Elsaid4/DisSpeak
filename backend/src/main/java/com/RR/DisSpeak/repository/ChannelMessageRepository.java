@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ChannelMessageRepository extends JpaRepository<ChannelMessage, Long> {
-    @Query("SELECT cm FROM ChannelMessage cm WHERE cm.channel.id = :channelId ORDER BY cm.timestamp DESC")
+    @Query("SELECT cm FROM ChannelMessage cm WHERE cm.channel.id = :channelId ORDER BY cm.timestamp ASC")
     List<ChannelMessage> findByChannelId(@Param("channelId") Long channelId);
 
     @Query("SELECT cm FROM ChannelMessage cm WHERE cm.user.id = :userId ORDER BY cm.timestamp DESC")
