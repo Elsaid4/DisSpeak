@@ -1,0 +1,2940 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+backend/.gitattributes
+backend/.gitignore
+backend/.mvn/wrapper/maven-wrapper.properties
+backend/mvnw
+backend/mvnw.cmd
+backend/pom.xml
+backend/src/main/java/com/RR/DisSpeak/config/Status.java
+backend/src/main/java/com/RR/DisSpeak/config/WebSocketsConfig.java
+backend/src/main/java/com/RR/DisSpeak/controller/AuthenticationController.java
+backend/src/main/java/com/RR/DisSpeak/controller/MessageController.java
+backend/src/main/java/com/RR/DisSpeak/controller/PageController.java
+backend/src/main/java/com/RR/DisSpeak/controller/ServerController.java
+backend/src/main/java/com/RR/DisSpeak/controller/UserController.java
+backend/src/main/java/com/RR/DisSpeak/DisSpeakApplication.java
+backend/src/main/java/com/RR/DisSpeak/DisSpeakController.java
+backend/src/main/java/com/RR/DisSpeak/dto/CreateServerDto.java
+backend/src/main/java/com/RR/DisSpeak/dto/SignInDto.java
+backend/src/main/java/com/RR/DisSpeak/model/entity/Channel.java
+backend/src/main/java/com/RR/DisSpeak/model/entity/ChannelMemberState.java
+backend/src/main/java/com/RR/DisSpeak/model/entity/ChannelMessage.java
+backend/src/main/java/com/RR/DisSpeak/model/entity/enums/ChannelType.java
+backend/src/main/java/com/RR/DisSpeak/model/entity/enums/Role.java
+backend/src/main/java/com/RR/DisSpeak/model/entity/PrivateChat.java
+backend/src/main/java/com/RR/DisSpeak/model/entity/PrivateMessage.java
+backend/src/main/java/com/RR/DisSpeak/model/entity/Server.java
+backend/src/main/java/com/RR/DisSpeak/model/entity/ServerMembers.java
+backend/src/main/java/com/RR/DisSpeak/model/entity/User.java
+backend/src/main/java/com/RR/DisSpeak/repository/ChannelMemberStateRepository.java
+backend/src/main/java/com/RR/DisSpeak/repository/ChannelMessageRepository.java
+backend/src/main/java/com/RR/DisSpeak/repository/ChannelRepository.java
+backend/src/main/java/com/RR/DisSpeak/repository/PrivateChatRepository.java
+backend/src/main/java/com/RR/DisSpeak/repository/PrivateMessageRepository.java
+backend/src/main/java/com/RR/DisSpeak/repository/ServerMembersRepository.java
+backend/src/main/java/com/RR/DisSpeak/repository/ServerRepository.java
+backend/src/main/java/com/RR/DisSpeak/repository/UserRepository.java
+backend/src/main/java/com/RR/DisSpeak/service/ChannelMessageService.java
+backend/src/main/java/com/RR/DisSpeak/service/ChannelService.java
+backend/src/main/java/com/RR/DisSpeak/service/MessageService.java
+backend/src/main/java/com/RR/DisSpeak/service/PrivateMessageService.java
+backend/src/main/java/com/RR/DisSpeak/service/ServerService.java
+backend/src/main/java/com/RR/DisSpeak/service/UserService.java
+backend/src/main/resources/application.properties
+backend/src/main/resources/templates/index.html
+backend/src/test/java/com/RR/DisSpeak/DisSpeakApplicationTests.java
+frontend/.env
+frontend/.gitignore
+frontend/package.json
+frontend/public/favicon.ico
+frontend/public/index.html
+frontend/public/logo192.png
+frontend/public/logo512.png
+frontend/public/manifest.json
+frontend/public/robots.txt
+frontend/README.md
+frontend/src/App.css
+frontend/src/App.jsx
+frontend/src/App.test.js
+frontend/src/components/auth/Login.jsx
+frontend/src/components/auth/Register.jsx
+frontend/src/components/chat/MessageInput.jsx
+frontend/src/components/chat/MessageItem.jsx
+frontend/src/components/chat/MessageList.jsx
+frontend/src/components/layout/ChatArea.jsx
+frontend/src/components/layout/Sidebar.jsx
+frontend/src/components/layout/UserPanel.jsx
+frontend/src/context/AuthContext.JSX
+frontend/src/context/ChatContext.jsx
+frontend/src/index.css
+frontend/src/index.jsx
+frontend/src/logo.svg
+frontend/src/pages/Dashboard.jsx
+frontend/src/pages/Login.jsx
+frontend/src/reportWebVitals.js
+frontend/src/services/api.js
+frontend/src/services/websocket.js
+frontend/src/setupTests.js
+HELP.md
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="backend/src/main/java/com/RR/DisSpeak/controller/ServerController.java">
+package com.RR.DisSpeak.controller;
+
+import com.RR.DisSpeak.dto.CreateServerDto;
+import com.RR.DisSpeak.model.entity.Channel;
+import com.RR.DisSpeak.model.entity.Server;
+import com.RR.DisSpeak.repository.ServerMembersRepository;
+import com.RR.DisSpeak.service.ChannelService;
+import com.RR.DisSpeak.service.ServerService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/servers")
+@RequiredArgsConstructor
+public class ServerController {
+
+    private final ServerService serverService;
+    private final ChannelService channelService;
+
+    @PostMapping
+    public ResponseEntity<Server> createServer(@RequestBody CreateServerDto dto, Principal principal) {
+        return ResponseEntity.ok(serverService.createServer(dto, principal.getName()));
+    }
+
+    @GetMapping("/{serverId}/channels")
+    public ResponseEntity<List<Channel>> getServerChannels(@PathVariable Long serverId) {
+        return ResponseEntity.ok(channelService.getChannelsByServerId(serverId));
+    }
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/dto/CreateServerDto.java">
+package com.RR.DisSpeak.dto;
+
+import com.RR.DisSpeak.model.entity.User;
+import lombok.Data;
+
+@Data
+public class CreateServerDto {
+    private String name;
+    private Long ownerId;
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/model/entity/enums/ChannelType.java">
+package com.RR.DisSpeak.model.entity.enums;
+
+public enum ChannelType {
+    TEXT,
+    VOICE
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/model/entity/enums/Role.java">
+package com.RR.DisSpeak.model.entity.enums;
+
+public enum Role{
+    ADMIN,
+    MEMBER,
+    MODERATOR
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/repository/ServerMembersRepository.java">
+package com.RR.DisSpeak.repository;
+
+import com.RR.DisSpeak.model.entity.Server;
+import com.RR.DisSpeak.model.entity.ServerMembers;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface ServerMembersRepository extends JpaRepository<ServerMembers, Long> {
+    List<ServerMembers> findAllByUserId(Long userId);
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/service/ChannelService.java">
+package com.RR.DisSpeak.service;
+
+import com.RR.DisSpeak.model.entity.Channel;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ChannelService {
+    public List<Channel> getChannelsByServerId(Long serverId) {
+        return null;
+    }
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/service/ServerService.java">
+package com.RR.DisSpeak.service;
+
+import com.RR.DisSpeak.dto.CreateServerDto;
+import com.RR.DisSpeak.model.entity.Channel;
+import com.RR.DisSpeak.model.entity.Server;
+import com.RR.DisSpeak.model.entity.ServerMembers;
+import com.RR.DisSpeak.model.entity.User;
+import com.RR.DisSpeak.model.entity.enums.ChannelType;
+import com.RR.DisSpeak.model.entity.enums.Role;
+import com.RR.DisSpeak.repository.ChannelRepository;
+import com.RR.DisSpeak.repository.ServerMembersRepository;
+import com.RR.DisSpeak.repository.ServerRepository;
+import com.RR.DisSpeak.repository.UserRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class ServerService {
+    private final ServerRepository serverRepository;
+    private final UserRepository userRepository;
+    private final ServerMembersRepository serverMembersRepository;
+    private final ChannelRepository channelRepository;
+
+    @Transactional
+    public Server createServer(CreateServerDto request, String name) {
+        // 1. Verfica esistenza dell'utente proprietario
+        User owner = userRepository.findById(request.getOwnerId())
+                .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + request.getOwnerId()));
+
+        // 2. Salva il nuovo Server
+        Server server = new Server();
+        server.setName(request.getName());
+        // Se hai aggiornato la relazione in Server come suggerito:
+        server.setOwner(owner);
+        // Altrimenti se hai l'id numerico semplice:
+        // server.setOwner_id(owner.getId().intValue());
+
+        Server savedServer = serverRepository.save(server);
+
+        // 3. Aggiungi l'utente creatore nella tabella 'server_members' con ruolo ADMIN
+        ServerMembers member = new ServerMembers();
+        member.setServer(savedServer);
+        member.setUser(owner);
+        member.setRole(Role.ADMIN);
+        serverMembersRepository.save(member);
+
+        // 4. Crea il canale di testo predefinito (#generale)
+        Channel defaultChannel = new Channel();
+        defaultChannel.setName("generale");
+        defaultChannel.setType(ChannelType.TEXT);
+        defaultChannel.setPublic(true);
+        defaultChannel.setServer(savedServer);
+        channelRepository.save(defaultChannel);
+
+        return savedServer;
+    }
+
+}
+</file>
+
+<file path="frontend/src/index.jsx">
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+</file>
+
+<file path="frontend/src/pages/Dashboard.jsx">
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+export default function Dashboard({ user, onLogout }) {
+    const [servers, setServers] = useState([]);
+    const [selectedServer, setSelectedServer] = useState(null);
+    const [channels, setChannels] = useState([]);
+    const [selectedChannel, setSelectedChannel] = useState(null);
+    const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState('');
+    const [loadingMessages, setLoadingMessages] = useState(false);
+
+    // Stato per la finestra modale "Crea Server"
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newServerName, setNewServerName] = useState('');
+
+    // 1. Carica i Server dell'utente
+    useEffect(() => {
+        axios.get(`/api/users/${user.id}/servers`)
+            .then(res => {
+                setServers(res.data);
+                if (res.data.length > 0) {
+                    setSelectedServer(res.data[0]);
+                }
+            })
+            .catch(err => console.error("Errore caricamento server:", err));
+    }, [user.id]);
+
+    // 2. Carica i Canali del Server selezionato
+    useEffect(() => {
+        if (!selectedServer) return;
+
+        axios.get(`/api/servers/${selectedServer.id}/channels`)
+            .then(res => {
+                setChannels(res.data);
+                if (res.data.length > 0) {
+                    setSelectedChannel(res.data[0]);
+                } else {
+                    setSelectedChannel(null);
+                    setMessages([]);
+                }
+            })
+            .catch(err => console.error("Errore caricamento canali:", err));
+    }, [selectedServer]);
+
+    // 3. Carica i Messaggi del Canale selezionato
+    useEffect(() => {
+        if (!selectedChannel) return;
+
+        setLoadingMessages(true);
+        axios.get(`/api/channels/${selectedChannel.id}/messages`)
+            .then(res => {
+                setMessages(res.data);
+                setLoadingMessages(false);
+            })
+            .catch(err => {
+                console.error("Errore caricamento messaggi:", err);
+                setLoadingMessages(false);
+            });
+    }, [selectedChannel]);
+
+    // 4. Invia un nuovo messaggio
+    const handleSendMessage = (e) => {
+        e.preventDefault();
+        if (!newMessage.trim() || !selectedChannel) return;
+
+        const payload = {
+            content: newMessage,
+            userId: user.id,
+            channelId: selectedChannel.id
+        };
+
+        axios.post(`/api/channels/${selectedChannel.id}/messages`, payload)
+            .then(res => {
+                setMessages(prev => [...prev, res.data]);
+                setNewMessage('');
+            })
+            .catch(err => console.error("Errore invio messaggio:", err));
+    };
+
+    // 5. Gestione Creazione del Server
+    const handleCreateServer = (e) => {
+        e.preventDefault();
+        if (!newServerName.trim()) return;
+
+        const payload = {
+            name: newServerName,
+            ownerId: user.id
+        };
+
+        axios.post('/api/servers', payload)
+            .then(res => {
+                const createdServer = res.data;
+                // Aggiunge il server alla lista e lo seleziona subito
+                setServers(prev => [...prev, createdServer]);
+                setSelectedServer(createdServer);
+
+                // Resetta lo stato del form e chiude il modale
+                setNewServerName('');
+                setIsModalOpen(false);
+            })
+            .catch(err => console.error("Errore creazione server:", err));
+    };
+
+    return (
+        <div style={styles.container}>
+            {/* BARRA LATERALE 1: Lista dei Server + Pulsante Aggiungi */}
+            <aside style={styles.serverBar}>
+                {servers.map(server => (
+                    <button
+                        key={server.id}
+                        onClick={() => setSelectedServer(server)}
+                        style={{
+                            ...styles.serverIcon,
+                            borderLeft: selectedServer?.id === server.id ? '4px solid #fff' : 'none'
+                        }}
+                        title={server.name}
+                    >
+                        {server.name.substring(0, 2).toUpperCase()}
+                    </button>
+                ))}
+
+                {/* Pulsante "+" per creare un nuovo server */}
+                <button
+                    onClick={() => setIsModalOpen(true)}
+                    style={styles.addServerBtn}
+                    title="Crea un nuovo server"
+                >
+                    +
+                </button>
+            </aside>
+
+            {/* BARRA LATERALE 2: Canali del Server Selezionato */}
+            <aside style={styles.channelBar}>
+                <div style={styles.serverHeader}>
+                    <h3 style={styles.serverName}>{selectedServer ? selectedServer.name : 'Nessun Server'}</h3>
+                </div>
+                <div style={styles.channelList}>
+                    <div style={styles.categoryTitle}>CANALI TESTUALI</div>
+                    {channels.map(channel => (
+                        <div
+                            key={channel.id}
+                            onClick={() => setSelectedChannel(channel)}
+                            style={{
+                                ...styles.channelItem,
+                                ...(selectedChannel?.id === channel.id ? styles.activeChannel : {})
+                            }}
+                        >
+                            # {channel.name}
+                        </div>
+                    ))}
+                </div>
+            </aside>
+
+            {/* AREA PRINCIPALE: Chat e Messaggi */}
+            <main style={styles.mainContent}>
+                <header style={styles.header}>
+                    <div style={styles.headerTitle}>
+                        <span style={{ color: '#8e9297', marginRight: '8px' }}>#</span>
+                        <span style={{ fontWeight: 'bold' }}>{selectedChannel?.name || 'Seleziona un canale'}</span>
+                    </div>
+
+                    <div style={styles.userProfile}>
+                        <span style={styles.statusDot}></span>
+                        <span style={{ color: '#fff' }}>{user.fullName}</span>
+                        <button onClick={onLogout} style={styles.logoutBtn}>Disconnetti</button>
+                    </div>
+                </header>
+
+                <div style={styles.messagesContainer}>
+                    {loadingMessages ? (
+                        <p style={{ color: '#8e9297' }}>Caricamento messaggi...</p>
+                    ) : messages.length === 0 ? (
+                        <p style={{ color: '#8e9297' }}>Nessun messaggio presente in questo canale.</p>
+                    ) : (
+                        messages.map(msg => (
+                            <div key={msg.id} style={styles.messageItem}>
+                                <div style={styles.avatar}>
+                                    {msg.user?.fullName?.charAt(0) || 'U'}
+                                </div>
+                                <div>
+                                    <div style={styles.messageMeta}>
+                                        <span style={styles.author}>{msg.user?.fullName || msg.user?.username}</span>
+                                        <span style={styles.timestamp}>
+                                            {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
+                                    </div>
+                                    <div style={styles.messageContent}>{msg.content}</div>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+
+                {selectedChannel && (
+                    <form onSubmit={handleSendMessage} style={styles.inputArea}>
+                        <input
+                            type="text"
+                            placeholder={`Invia un messaggio in #${selectedChannel.name}`}
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            style={styles.messageInput}
+                        />
+                    </form>
+                )}
+            </main>
+
+            {/* MODALE DI CREAZIONE SERVER */}
+            {isModalOpen && (
+                <div style={styles.modalOverlay}>
+                    <div style={styles.modalCard}>
+                        <h2 style={styles.modalTitle}>Personalizza il tuo server</h2>
+                        <p style={styles.modalSubtitle}>
+                            Dai al tuo nuovo server una personalità con un nome. Potrai sempre cambiarlo in seguito.
+                        </p>
+
+                        <form onSubmit={handleCreateServer}>
+                            <label style={styles.label}>NOME DEL SERVER</label>
+                            <input
+                                type="text"
+                                value={newServerName}
+                                onChange={(e) => setNewServerName(e.target.value)}
+                                placeholder="Es. Server di Marco"
+                                style={styles.modalInput}
+                                required
+                                autoFocus
+                            />
+
+                            <div style={styles.modalActions}>
+                                <button
+                                    type="button"
+                                    onClick={() => setIsModalOpen(false)}
+                                    style={styles.cancelBtn}
+                                >
+                                    Annulla
+                                </button>
+                                <button type="submit" style={styles.createBtn}>
+                                    Crea Server
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
+const styles = {
+    container: { display: 'flex', height: '100vh', backgroundColor: '#36393f', fontFamily: 'sans-serif', overflow: 'hidden' },
+    serverBar: { width: '72px', backgroundColor: '#202225', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '12px', gap: '10px' },
+    serverIcon: { width: '48px', height: '48px', borderRadius: '50%', backgroundColor: '#36393f', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 'bold' },
+    addServerBtn: {
+        width: '48px',
+        height: '48px',
+        borderRadius: '50%',
+        backgroundColor: '#36393f',
+        color: '#23a55a',
+        border: 'none',
+        fontSize: '24px',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        transition: '0.2s'
+    },
+    channelBar: { width: '240px', backgroundColor: '#2f3136', display: 'flex', flexDirection: 'column', borderRight: '1px solid #202225' },
+    serverHeader: { height: '50px', borderBottom: '1px solid #202225', display: 'flex', alignItems: 'center', padding: '0 16px' },
+    serverName: { fontSize: '16px', color: '#fff', margin: 0 },
+    channelList: { padding: '10px 8px', flex: 1 },
+    categoryTitle: { fontSize: '12px', fontWeight: 'bold', color: '#8e9297', marginBottom: '6px', paddingLeft: '8px' },
+    channelItem: { padding: '8px', borderRadius: '4px', cursor: 'pointer', color: '#8e9297', marginBottom: '2px', fontSize: '14px' },
+    activeChannel: { backgroundColor: '#393c43', color: '#fff' },
+    mainContent: { flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: '#36393f' },
+    header: { height: '50px', backgroundColor: '#36393f', borderBottom: '1px solid #202225', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px' },
+    headerTitle: { color: '#fff', fontSize: '16px' },
+    userProfile: { display: 'flex', alignItems: 'center', gap: '10px' },
+    statusDot: { width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#3ba55d' },
+    logoutBtn: { padding: '6px 12px', backgroundColor: '#ed4245', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' },
+    messagesContainer: { flex: 1, padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '15px' },
+    messageItem: { display: 'flex', gap: '12px', alignItems: 'flex-start' },
+    avatar: { width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#5865f2', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' },
+    messageMeta: { display: 'flex', gap: '8px', alignItems: 'baseline', marginBottom: '4px' },
+    author: { color: '#fff', fontWeight: 'bold', fontSize: '14px' },
+    timestamp: { color: '#72767d', fontSize: '12px' },
+    messageContent: { color: '#dcddde', fontSize: '14px', lineHeight: '1.4' },
+    inputArea: { padding: '0 20px 20px 20px' },
+    messageInput: { width: '100%', padding: '12px 16px', backgroundColor: '#40444b', border: 'none', borderRadius: '8px', color: '#fff', fontSize: '14px', outline: 'none' },
+
+    /* STILI FINESTRA MODALE */
+    modalOverlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000
+    },
+    modalCard: {
+        backgroundColor: '#313338',
+        padding: '24px',
+        borderRadius: '8px',
+        width: '440px',
+        boxShadow: '0 8px 16px rgba(0,0,0,0.3)',
+        color: '#fff'
+    },
+    modalTitle: { margin: '0 0 8px 0', fontSize: '20px', textAlign: 'center' },
+    modalSubtitle: { color: '#b5bac1', fontSize: '14px', textAlign: 'center', marginBottom: '20px', lineHeight: '1.4' },
+    label: { display: 'block', fontSize: '12px', fontWeight: 'bold', color: '#b5bac1', marginBottom: '8px' },
+    modalInput: {
+        width: '100%',
+        padding: '10px',
+        backgroundColor: '#1e1f22',
+        border: 'none',
+        borderRadius: '4px',
+        color: '#fff',
+        fontSize: '14px',
+        boxSizing: 'border-box',
+        marginBottom: '20px',
+        outline: 'none'
+    },
+    modalActions: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' },
+    cancelBtn: { backgroundColor: 'transparent', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '14px' },
+    createBtn: { backgroundColor: '#5865f2', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px' }
+};
+</file>
+
+<file path="HELP.md">
+# Getting Started
+
+### Reference Documentation
+For further reference, please consider the following sections:
+
+* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
+* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/3.5.14/maven-plugin)
+* [Create an OCI image](https://docs.spring.io/spring-boot/3.5.14/maven-plugin/build-image.html)
+* [Spring Web](https://docs.spring.io/spring-boot/3.5.14/reference/web/servlet.html)
+* [WebSocket](https://docs.spring.io/spring-boot/3.5.14/reference/messaging/websockets.html)
+* [Spring Data JPA](https://docs.spring.io/spring-boot/3.5.14/reference/data/sql.html#data.sql.jpa-and-spring-data)
+* [Thymeleaf](https://docs.spring.io/spring-boot/3.5.14/reference/web/servlet.html#web.servlet.spring-mvc.template-engines)
+
+### Guides
+The following guides illustrate how to use some features concretely:
+
+* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
+* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
+* [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
+* [Using WebSocket to build an interactive web application](https://spring.io/guides/gs/messaging-stomp-websocket/)
+* [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
+* [Handling Form Submission](https://spring.io/guides/gs/handling-form-submission/)
+
+### Maven Parent overrides
+
+Due to Maven's design, elements are inherited from the parent POM to the project POM.
+While most of the inheritance is fine, it also inherits unwanted elements like `<license>` and `<developers>` from the parent.
+To prevent this, the project POM contains empty overrides for these elements.
+If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
+</file>
+
+<file path="backend/.gitattributes">
+/mvnw text eol=lf
+*.cmd text eol=crlf
+</file>
+
+<file path="backend/.gitignore">
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+</file>
+
+<file path="backend/.mvn/wrapper/maven-wrapper.properties">
+wrapperVersion=3.3.4
+distributionType=only-script
+distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.14/apache-maven-3.9.14-bin.zip
+</file>
+
+<file path="backend/mvnw">
+#!/bin/sh
+# ----------------------------------------------------------------------------
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+# ----------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------
+# Apache Maven Wrapper startup batch script, version 3.3.4
+#
+# Optional ENV vars
+# -----------------
+#   JAVA_HOME - location of a JDK home dir, required when download maven via java source
+#   MVNW_REPOURL - repo url base for downloading maven distribution
+#   MVNW_USERNAME/MVNW_PASSWORD - user and password for downloading maven
+#   MVNW_VERBOSE - true: enable verbose log; debug: trace the mvnw script; others: silence the output
+# ----------------------------------------------------------------------------
+
+set -euf
+[ "${MVNW_VERBOSE-}" != debug ] || set -x
+
+# OS specific support.
+native_path() { printf %s\\n "$1"; }
+case "$(uname)" in
+CYGWIN* | MINGW*)
+  [ -z "${JAVA_HOME-}" ] || JAVA_HOME="$(cygpath --unix "$JAVA_HOME")"
+  native_path() { cygpath --path --windows "$1"; }
+  ;;
+esac
+
+# set JAVACMD and JAVACCMD
+set_java_home() {
+  # For Cygwin and MinGW, ensure paths are in Unix format before anything is touched
+  if [ -n "${JAVA_HOME-}" ]; then
+    if [ -x "$JAVA_HOME/jre/sh/java" ]; then
+      # IBM's JDK on AIX uses strange locations for the executables
+      JAVACMD="$JAVA_HOME/jre/sh/java"
+      JAVACCMD="$JAVA_HOME/jre/sh/javac"
+    else
+      JAVACMD="$JAVA_HOME/bin/java"
+      JAVACCMD="$JAVA_HOME/bin/javac"
+
+      if [ ! -x "$JAVACMD" ] || [ ! -x "$JAVACCMD" ]; then
+        echo "The JAVA_HOME environment variable is not defined correctly, so mvnw cannot run." >&2
+        echo "JAVA_HOME is set to \"$JAVA_HOME\", but \"\$JAVA_HOME/bin/java\" or \"\$JAVA_HOME/bin/javac\" does not exist." >&2
+        return 1
+      fi
+    fi
+  else
+    JAVACMD="$(
+      'set' +e
+      'unset' -f command 2>/dev/null
+      'command' -v java
+    )" || :
+    JAVACCMD="$(
+      'set' +e
+      'unset' -f command 2>/dev/null
+      'command' -v javac
+    )" || :
+
+    if [ ! -x "${JAVACMD-}" ] || [ ! -x "${JAVACCMD-}" ]; then
+      echo "The java/javac command does not exist in PATH nor is JAVA_HOME set, so mvnw cannot run." >&2
+      return 1
+    fi
+  fi
+}
+
+# hash string like Java String::hashCode
+hash_string() {
+  str="${1:-}" h=0
+  while [ -n "$str" ]; do
+    char="${str%"${str#?}"}"
+    h=$(((h * 31 + $(LC_CTYPE=C printf %d "'$char")) % 4294967296))
+    str="${str#?}"
+  done
+  printf %x\\n $h
+}
+
+verbose() { :; }
+[ "${MVNW_VERBOSE-}" != true ] || verbose() { printf %s\\n "${1-}"; }
+
+die() {
+  printf %s\\n "$1" >&2
+  exit 1
+}
+
+trim() {
+  # MWRAPPER-139:
+  #   Trims trailing and leading whitespace, carriage returns, tabs, and linefeeds.
+  #   Needed for removing poorly interpreted newline sequences when running in more
+  #   exotic environments such as mingw bash on Windows.
+  printf "%s" "${1}" | tr -d '[:space:]'
+}
+
+scriptDir="$(dirname "$0")"
+scriptName="$(basename "$0")"
+
+# parse distributionUrl and optional distributionSha256Sum, requires .mvn/wrapper/maven-wrapper.properties
+while IFS="=" read -r key value; do
+  case "${key-}" in
+  distributionUrl) distributionUrl=$(trim "${value-}") ;;
+  distributionSha256Sum) distributionSha256Sum=$(trim "${value-}") ;;
+  esac
+done <"$scriptDir/.mvn/wrapper/maven-wrapper.properties"
+[ -n "${distributionUrl-}" ] || die "cannot read distributionUrl property in $scriptDir/.mvn/wrapper/maven-wrapper.properties"
+
+case "${distributionUrl##*/}" in
+maven-mvnd-*bin.*)
+  MVN_CMD=mvnd.sh _MVNW_REPO_PATTERN=/maven/mvnd/
+  case "${PROCESSOR_ARCHITECTURE-}${PROCESSOR_ARCHITEW6432-}:$(uname -a)" in
+  *AMD64:CYGWIN* | *AMD64:MINGW*) distributionPlatform=windows-amd64 ;;
+  :Darwin*x86_64) distributionPlatform=darwin-amd64 ;;
+  :Darwin*arm64) distributionPlatform=darwin-aarch64 ;;
+  :Linux*x86_64*) distributionPlatform=linux-amd64 ;;
+  *)
+    echo "Cannot detect native platform for mvnd on $(uname)-$(uname -m), use pure java version" >&2
+    distributionPlatform=linux-amd64
+    ;;
+  esac
+  distributionUrl="${distributionUrl%-bin.*}-$distributionPlatform.zip"
+  ;;
+maven-mvnd-*) MVN_CMD=mvnd.sh _MVNW_REPO_PATTERN=/maven/mvnd/ ;;
+*) MVN_CMD="mvn${scriptName#mvnw}" _MVNW_REPO_PATTERN=/org/apache/maven/ ;;
+esac
+
+# apply MVNW_REPOURL and calculate MAVEN_HOME
+# maven home pattern: ~/.m2/wrapper/dists/{apache-maven-<version>,maven-mvnd-<version>-<platform>}/<hash>
+[ -z "${MVNW_REPOURL-}" ] || distributionUrl="$MVNW_REPOURL$_MVNW_REPO_PATTERN${distributionUrl#*"$_MVNW_REPO_PATTERN"}"
+distributionUrlName="${distributionUrl##*/}"
+distributionUrlNameMain="${distributionUrlName%.*}"
+distributionUrlNameMain="${distributionUrlNameMain%-bin}"
+MAVEN_USER_HOME="${MAVEN_USER_HOME:-${HOME}/.m2}"
+MAVEN_HOME="${MAVEN_USER_HOME}/wrapper/dists/${distributionUrlNameMain-}/$(hash_string "$distributionUrl")"
+
+exec_maven() {
+  unset MVNW_VERBOSE MVNW_USERNAME MVNW_PASSWORD MVNW_REPOURL || :
+  exec "$MAVEN_HOME/bin/$MVN_CMD" "$@" || die "cannot exec $MAVEN_HOME/bin/$MVN_CMD"
+}
+
+if [ -d "$MAVEN_HOME" ]; then
+  verbose "found existing MAVEN_HOME at $MAVEN_HOME"
+  exec_maven "$@"
+fi
+
+case "${distributionUrl-}" in
+*?-bin.zip | *?maven-mvnd-?*-?*.zip) ;;
+*) die "distributionUrl is not valid, must match *-bin.zip or maven-mvnd-*.zip, but found '${distributionUrl-}'" ;;
+esac
+
+# prepare tmp dir
+if TMP_DOWNLOAD_DIR="$(mktemp -d)" && [ -d "$TMP_DOWNLOAD_DIR" ]; then
+  clean() { rm -rf -- "$TMP_DOWNLOAD_DIR"; }
+  trap clean HUP INT TERM EXIT
+else
+  die "cannot create temp dir"
+fi
+
+mkdir -p -- "${MAVEN_HOME%/*}"
+
+# Download and Install Apache Maven
+verbose "Couldn't find MAVEN_HOME, downloading and installing it ..."
+verbose "Downloading from: $distributionUrl"
+verbose "Downloading to: $TMP_DOWNLOAD_DIR/$distributionUrlName"
+
+# select .zip or .tar.gz
+if ! command -v unzip >/dev/null; then
+  distributionUrl="${distributionUrl%.zip}.tar.gz"
+  distributionUrlName="${distributionUrl##*/}"
+fi
+
+# verbose opt
+__MVNW_QUIET_WGET=--quiet __MVNW_QUIET_CURL=--silent __MVNW_QUIET_UNZIP=-q __MVNW_QUIET_TAR=''
+[ "${MVNW_VERBOSE-}" != true ] || __MVNW_QUIET_WGET='' __MVNW_QUIET_CURL='' __MVNW_QUIET_UNZIP='' __MVNW_QUIET_TAR=v
+
+# normalize http auth
+case "${MVNW_PASSWORD:+has-password}" in
+'') MVNW_USERNAME='' MVNW_PASSWORD='' ;;
+has-password) [ -n "${MVNW_USERNAME-}" ] || MVNW_USERNAME='' MVNW_PASSWORD='' ;;
+esac
+
+if [ -z "${MVNW_USERNAME-}" ] && command -v wget >/dev/null; then
+  verbose "Found wget ... using wget"
+  wget ${__MVNW_QUIET_WGET:+"$__MVNW_QUIET_WGET"} "$distributionUrl" -O "$TMP_DOWNLOAD_DIR/$distributionUrlName" || die "wget: Failed to fetch $distributionUrl"
+elif [ -z "${MVNW_USERNAME-}" ] && command -v curl >/dev/null; then
+  verbose "Found curl ... using curl"
+  curl ${__MVNW_QUIET_CURL:+"$__MVNW_QUIET_CURL"} -f -L -o "$TMP_DOWNLOAD_DIR/$distributionUrlName" "$distributionUrl" || die "curl: Failed to fetch $distributionUrl"
+elif set_java_home; then
+  verbose "Falling back to use Java to download"
+  javaSource="$TMP_DOWNLOAD_DIR/Downloader.java"
+  targetZip="$TMP_DOWNLOAD_DIR/$distributionUrlName"
+  cat >"$javaSource" <<-END
+	public class Downloader extends java.net.Authenticator
+	{
+	  protected java.net.PasswordAuthentication getPasswordAuthentication()
+	  {
+	    return new java.net.PasswordAuthentication( System.getenv( "MVNW_USERNAME" ), System.getenv( "MVNW_PASSWORD" ).toCharArray() );
+	  }
+	  public static void main( String[] args ) throws Exception
+	  {
+	    setDefault( new Downloader() );
+	    java.nio.file.Files.copy( java.net.URI.create( args[0] ).toURL().openStream(), java.nio.file.Paths.get( args[1] ).toAbsolutePath().normalize() );
+	  }
+	}
+	END
+  # For Cygwin/MinGW, switch paths to Windows format before running javac and java
+  verbose " - Compiling Downloader.java ..."
+  "$(native_path "$JAVACCMD")" "$(native_path "$javaSource")" || die "Failed to compile Downloader.java"
+  verbose " - Running Downloader.java ..."
+  "$(native_path "$JAVACMD")" -cp "$(native_path "$TMP_DOWNLOAD_DIR")" Downloader "$distributionUrl" "$(native_path "$targetZip")"
+fi
+
+# If specified, validate the SHA-256 sum of the Maven distribution zip file
+if [ -n "${distributionSha256Sum-}" ]; then
+  distributionSha256Result=false
+  if [ "$MVN_CMD" = mvnd.sh ]; then
+    echo "Checksum validation is not supported for maven-mvnd." >&2
+    echo "Please disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties." >&2
+    exit 1
+  elif command -v sha256sum >/dev/null; then
+    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionUrlName" | sha256sum -c - >/dev/null 2>&1; then
+      distributionSha256Result=true
+    fi
+  elif command -v shasum >/dev/null; then
+    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionUrlName" | shasum -a 256 -c >/dev/null 2>&1; then
+      distributionSha256Result=true
+    fi
+  else
+    echo "Checksum validation was requested but neither 'sha256sum' or 'shasum' are available." >&2
+    echo "Please install either command, or disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties." >&2
+    exit 1
+  fi
+  if [ $distributionSha256Result = false ]; then
+    echo "Error: Failed to validate Maven distribution SHA-256, your Maven distribution might be compromised." >&2
+    echo "If you updated your Maven version, you need to update the specified distributionSha256Sum property." >&2
+    exit 1
+  fi
+fi
+
+# unzip and move
+if command -v unzip >/dev/null; then
+  unzip ${__MVNW_QUIET_UNZIP:+"$__MVNW_QUIET_UNZIP"} "$TMP_DOWNLOAD_DIR/$distributionUrlName" -d "$TMP_DOWNLOAD_DIR" || die "failed to unzip"
+else
+  tar xzf${__MVNW_QUIET_TAR:+"$__MVNW_QUIET_TAR"} "$TMP_DOWNLOAD_DIR/$distributionUrlName" -C "$TMP_DOWNLOAD_DIR" || die "failed to untar"
+fi
+
+# Find the actual extracted directory name (handles snapshots where filename != directory name)
+actualDistributionDir=""
+
+# First try the expected directory name (for regular distributions)
+if [ -d "$TMP_DOWNLOAD_DIR/$distributionUrlNameMain" ]; then
+  if [ -f "$TMP_DOWNLOAD_DIR/$distributionUrlNameMain/bin/$MVN_CMD" ]; then
+    actualDistributionDir="$distributionUrlNameMain"
+  fi
+fi
+
+# If not found, search for any directory with the Maven executable (for snapshots)
+if [ -z "$actualDistributionDir" ]; then
+  # enable globbing to iterate over items
+  set +f
+  for dir in "$TMP_DOWNLOAD_DIR"/*; do
+    if [ -d "$dir" ]; then
+      if [ -f "$dir/bin/$MVN_CMD" ]; then
+        actualDistributionDir="$(basename "$dir")"
+        break
+      fi
+    fi
+  done
+  set -f
+fi
+
+if [ -z "$actualDistributionDir" ]; then
+  verbose "Contents of $TMP_DOWNLOAD_DIR:"
+  verbose "$(ls -la "$TMP_DOWNLOAD_DIR")"
+  die "Could not find Maven distribution directory in extracted archive"
+fi
+
+verbose "Found extracted Maven distribution directory: $actualDistributionDir"
+printf %s\\n "$distributionUrl" >"$TMP_DOWNLOAD_DIR/$actualDistributionDir/mvnw.url"
+mv -- "$TMP_DOWNLOAD_DIR/$actualDistributionDir" "$MAVEN_HOME" || [ -d "$MAVEN_HOME" ] || die "fail to move MAVEN_HOME"
+
+clean || :
+exec_maven "$@"
+</file>
+
+<file path="backend/mvnw.cmd">
+<# : batch portion
+@REM ----------------------------------------------------------------------------
+@REM Licensed to the Apache Software Foundation (ASF) under one
+@REM or more contributor license agreements.  See the NOTICE file
+@REM distributed with this work for additional information
+@REM regarding copyright ownership.  The ASF licenses this file
+@REM to you under the Apache License, Version 2.0 (the
+@REM "License"); you may not use this file except in compliance
+@REM with the License.  You may obtain a copy of the License at
+@REM
+@REM    http://www.apache.org/licenses/LICENSE-2.0
+@REM
+@REM Unless required by applicable law or agreed to in writing,
+@REM software distributed under the License is distributed on an
+@REM "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+@REM KIND, either express or implied.  See the License for the
+@REM specific language governing permissions and limitations
+@REM under the License.
+@REM ----------------------------------------------------------------------------
+
+@REM ----------------------------------------------------------------------------
+@REM Apache Maven Wrapper startup batch script, version 3.3.4
+@REM
+@REM Optional ENV vars
+@REM   MVNW_REPOURL - repo url base for downloading maven distribution
+@REM   MVNW_USERNAME/MVNW_PASSWORD - user and password for downloading maven
+@REM   MVNW_VERBOSE - true: enable verbose log; others: silence the output
+@REM ----------------------------------------------------------------------------
+
+@IF "%__MVNW_ARG0_NAME__%"=="" (SET __MVNW_ARG0_NAME__=%~nx0)
+@SET __MVNW_CMD__=
+@SET __MVNW_ERROR__=
+@SET __MVNW_PSMODULEP_SAVE=%PSModulePath%
+@SET PSModulePath=
+@FOR /F "usebackq tokens=1* delims==" %%A IN (`powershell -noprofile "& {$scriptDir='%~dp0'; $script='%__MVNW_ARG0_NAME__%'; icm -ScriptBlock ([Scriptblock]::Create((Get-Content -Raw '%~f0'))) -NoNewScope}"`) DO @(
+  IF "%%A"=="MVN_CMD" (set __MVNW_CMD__=%%B) ELSE IF "%%B"=="" (echo %%A) ELSE (echo %%A=%%B)
+)
+@SET PSModulePath=%__MVNW_PSMODULEP_SAVE%
+@SET __MVNW_PSMODULEP_SAVE=
+@SET __MVNW_ARG0_NAME__=
+@SET MVNW_USERNAME=
+@SET MVNW_PASSWORD=
+@IF NOT "%__MVNW_CMD__%"=="" ("%__MVNW_CMD__%" %*)
+@echo Cannot start maven from wrapper >&2 && exit /b 1
+@GOTO :EOF
+: end batch / begin powershell #>
+
+$ErrorActionPreference = "Stop"
+if ($env:MVNW_VERBOSE -eq "true") {
+  $VerbosePreference = "Continue"
+}
+
+# calculate distributionUrl, requires .mvn/wrapper/maven-wrapper.properties
+$distributionUrl = (Get-Content -Raw "$scriptDir/.mvn/wrapper/maven-wrapper.properties" | ConvertFrom-StringData).distributionUrl
+if (!$distributionUrl) {
+  Write-Error "cannot read distributionUrl property in $scriptDir/.mvn/wrapper/maven-wrapper.properties"
+}
+
+switch -wildcard -casesensitive ( $($distributionUrl -replace '^.*/','') ) {
+  "maven-mvnd-*" {
+    $USE_MVND = $true
+    $distributionUrl = $distributionUrl -replace '-bin\.[^.]*$',"-windows-amd64.zip"
+    $MVN_CMD = "mvnd.cmd"
+    break
+  }
+  default {
+    $USE_MVND = $false
+    $MVN_CMD = $script -replace '^mvnw','mvn'
+    break
+  }
+}
+
+# apply MVNW_REPOURL and calculate MAVEN_HOME
+# maven home pattern: ~/.m2/wrapper/dists/{apache-maven-<version>,maven-mvnd-<version>-<platform>}/<hash>
+if ($env:MVNW_REPOURL) {
+  $MVNW_REPO_PATTERN = if ($USE_MVND -eq $False) { "/org/apache/maven/" } else { "/maven/mvnd/" }
+  $distributionUrl = "$env:MVNW_REPOURL$MVNW_REPO_PATTERN$($distributionUrl -replace "^.*$MVNW_REPO_PATTERN",'')"
+}
+$distributionUrlName = $distributionUrl -replace '^.*/',''
+$distributionUrlNameMain = $distributionUrlName -replace '\.[^.]*$','' -replace '-bin$',''
+
+$MAVEN_M2_PATH = "$HOME/.m2"
+if ($env:MAVEN_USER_HOME) {
+  $MAVEN_M2_PATH = "$env:MAVEN_USER_HOME"
+}
+
+if (-not (Test-Path -Path $MAVEN_M2_PATH)) {
+    New-Item -Path $MAVEN_M2_PATH -ItemType Directory | Out-Null
+}
+
+$MAVEN_WRAPPER_DISTS = $null
+if ((Get-Item $MAVEN_M2_PATH).Target[0] -eq $null) {
+  $MAVEN_WRAPPER_DISTS = "$MAVEN_M2_PATH/wrapper/dists"
+} else {
+  $MAVEN_WRAPPER_DISTS = (Get-Item $MAVEN_M2_PATH).Target[0] + "/wrapper/dists"
+}
+
+$MAVEN_HOME_PARENT = "$MAVEN_WRAPPER_DISTS/$distributionUrlNameMain"
+$MAVEN_HOME_NAME = ([System.Security.Cryptography.SHA256]::Create().ComputeHash([byte[]][char[]]$distributionUrl) | ForEach-Object {$_.ToString("x2")}) -join ''
+$MAVEN_HOME = "$MAVEN_HOME_PARENT/$MAVEN_HOME_NAME"
+
+if (Test-Path -Path "$MAVEN_HOME" -PathType Container) {
+  Write-Verbose "found existing MAVEN_HOME at $MAVEN_HOME"
+  Write-Output "MVN_CMD=$MAVEN_HOME/bin/$MVN_CMD"
+  exit $?
+}
+
+if (! $distributionUrlNameMain -or ($distributionUrlName -eq $distributionUrlNameMain)) {
+  Write-Error "distributionUrl is not valid, must end with *-bin.zip, but found $distributionUrl"
+}
+
+# prepare tmp dir
+$TMP_DOWNLOAD_DIR_HOLDER = New-TemporaryFile
+$TMP_DOWNLOAD_DIR = New-Item -Itemtype Directory -Path "$TMP_DOWNLOAD_DIR_HOLDER.dir"
+$TMP_DOWNLOAD_DIR_HOLDER.Delete() | Out-Null
+trap {
+  if ($TMP_DOWNLOAD_DIR.Exists) {
+    try { Remove-Item $TMP_DOWNLOAD_DIR -Recurse -Force | Out-Null }
+    catch { Write-Warning "Cannot remove $TMP_DOWNLOAD_DIR" }
+  }
+}
+
+New-Item -Itemtype Directory -Path "$MAVEN_HOME_PARENT" -Force | Out-Null
+
+# Download and Install Apache Maven
+Write-Verbose "Couldn't find MAVEN_HOME, downloading and installing it ..."
+Write-Verbose "Downloading from: $distributionUrl"
+Write-Verbose "Downloading to: $TMP_DOWNLOAD_DIR/$distributionUrlName"
+
+$webclient = New-Object System.Net.WebClient
+if ($env:MVNW_USERNAME -and $env:MVNW_PASSWORD) {
+  $webclient.Credentials = New-Object System.Net.NetworkCredential($env:MVNW_USERNAME, $env:MVNW_PASSWORD)
+}
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+$webclient.DownloadFile($distributionUrl, "$TMP_DOWNLOAD_DIR/$distributionUrlName") | Out-Null
+
+# If specified, validate the SHA-256 sum of the Maven distribution zip file
+$distributionSha256Sum = (Get-Content -Raw "$scriptDir/.mvn/wrapper/maven-wrapper.properties" | ConvertFrom-StringData).distributionSha256Sum
+if ($distributionSha256Sum) {
+  if ($USE_MVND) {
+    Write-Error "Checksum validation is not supported for maven-mvnd. `nPlease disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties."
+  }
+  Import-Module $PSHOME\Modules\Microsoft.PowerShell.Utility -Function Get-FileHash
+  if ((Get-FileHash "$TMP_DOWNLOAD_DIR/$distributionUrlName" -Algorithm SHA256).Hash.ToLower() -ne $distributionSha256Sum) {
+    Write-Error "Error: Failed to validate Maven distribution SHA-256, your Maven distribution might be compromised. If you updated your Maven version, you need to update the specified distributionSha256Sum property."
+  }
+}
+
+# unzip and move
+Expand-Archive "$TMP_DOWNLOAD_DIR/$distributionUrlName" -DestinationPath "$TMP_DOWNLOAD_DIR" | Out-Null
+
+# Find the actual extracted directory name (handles snapshots where filename != directory name)
+$actualDistributionDir = ""
+
+# First try the expected directory name (for regular distributions)
+$expectedPath = Join-Path "$TMP_DOWNLOAD_DIR" "$distributionUrlNameMain"
+$expectedMvnPath = Join-Path "$expectedPath" "bin/$MVN_CMD"
+if ((Test-Path -Path $expectedPath -PathType Container) -and (Test-Path -Path $expectedMvnPath -PathType Leaf)) {
+  $actualDistributionDir = $distributionUrlNameMain
+}
+
+# If not found, search for any directory with the Maven executable (for snapshots)
+if (!$actualDistributionDir) {
+  Get-ChildItem -Path "$TMP_DOWNLOAD_DIR" -Directory | ForEach-Object {
+    $testPath = Join-Path $_.FullName "bin/$MVN_CMD"
+    if (Test-Path -Path $testPath -PathType Leaf) {
+      $actualDistributionDir = $_.Name
+    }
+  }
+}
+
+if (!$actualDistributionDir) {
+  Write-Error "Could not find Maven distribution directory in extracted archive"
+}
+
+Write-Verbose "Found extracted Maven distribution directory: $actualDistributionDir"
+Rename-Item -Path "$TMP_DOWNLOAD_DIR/$actualDistributionDir" -NewName $MAVEN_HOME_NAME | Out-Null
+try {
+  Move-Item -Path "$TMP_DOWNLOAD_DIR/$MAVEN_HOME_NAME" -Destination $MAVEN_HOME_PARENT | Out-Null
+} catch {
+  if (! (Test-Path -Path "$MAVEN_HOME" -PathType Container)) {
+    Write-Error "fail to move MAVEN_HOME"
+  }
+} finally {
+  try { Remove-Item $TMP_DOWNLOAD_DIR -Recurse -Force | Out-Null }
+  catch { Write-Warning "Cannot remove $TMP_DOWNLOAD_DIR" }
+}
+
+Write-Output "MVN_CMD=$MAVEN_HOME/bin/$MVN_CMD"
+</file>
+
+<file path="backend/pom.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.5.14</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.RR</groupId>
+	<artifactId>DisSpeak</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name/>
+	<description/>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>21</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/config/Status.java">
+package com.RR.DisSpeak.config;
+
+public enum Status {
+    OFFLINE, ONLINE
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/controller/AuthenticationController.java">
+package com.RR.DisSpeak.controller;
+
+import com.RR.DisSpeak.dto.SignInDto;
+import com.RR.DisSpeak.model.entity.User;
+import com.RR.DisSpeak.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("api/auth")
+@CrossOrigin(origins = "http://localhost:3000")
+public class AuthenticationController {
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody SignInDto Sigin) {
+        User user = userService.loadUser(Sigin);
+        if (user != null){
+            userService.connect(user);
+            return ResponseEntity.ok(user);
+        }else return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody SignInDto register) {
+        User user = userService.registerUser(register);
+        userService.connect(user);
+        return ResponseEntity.ok(user);
+    }
+
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/controller/MessageController.java">
+package com.RR.DisSpeak.controller;
+
+import com.RR.DisSpeak.model.entity.ChannelMessage;
+import com.RR.DisSpeak.service.ChannelMessageService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/channels")
+@RequiredArgsConstructor
+public class MessageController {
+
+    private final ChannelMessageService messageService;
+
+    @GetMapping("/{channelId}/messages")
+    public ResponseEntity<List<ChannelMessage>> getChannelMessages(@PathVariable Long channelId) {
+        return ResponseEntity.ok(messageService.getMessagesForChannel(channelId));
+    }
+
+    @PostMapping("/{channelId}/messages")
+    public ResponseEntity<ChannelMessage> sendMessage(
+            @PathVariable Long channelId,
+            @RequestBody MessageRequest request,
+            Principal principal) {
+        return ResponseEntity.ok(messageService.sendMessage(channelId, request.getContent(), principal.getName()));
+    }
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/controller/UserController.java">
+package com.RR.DisSpeak.controller;
+
+import com.RR.DisSpeak.dto.CreateServerDto;
+import com.RR.DisSpeak.service.ServerService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/users")
+@RequiredArgsConstructor
+public class UserController {
+
+    private final ServerService serverService;
+
+    @GetMapping("/{userId}/servers")
+    public ResponseEntity<List<CreateServerDto>> getUserServers(@PathVariable Long userId) {
+        return ResponseEntity.ok(serverService.getServersByUserId(userId));
+    }
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/DisSpeakApplication.java">
+package com.RR.DisSpeak;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DisSpeakApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(DisSpeakApplication.class, args);
+	}
+
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/DisSpeakController.java">
+package com.RR.DisSpeak;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api")
+public class DisSpeakController {
+
+    @GetMapping("/hello")
+    public String sayHello() {
+        return "{\"message\": \"Ciao dal Backend!\"}";
+    }
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/model/entity/Channel.java">
+package com.RR.DisSpeak.model.entity;
+
+import com.RR.DisSpeak.model.entity.enums.ChannelType;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+@Data
+@NoArgsConstructor
+@Entity
+@Table(name = "channels")
+public class Channel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @Enumerated(EnumType.STRING)
+    private ChannelType type; // TEXT, VOICE
+
+    @Column(name = "is_public")
+    private boolean isPublic;
+
+    @ManyToOne
+    @JoinColumn(name = "server_id")
+    private Server server;
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/model/entity/ChannelMemberState.java">
+package com.RR.DisSpeak.model.entity;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@Entity
+@Table(name = "channel_member_state")
+public class ChannelMemberState {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "channel_id")
+    private Channel channel;
+
+    @Column(name = "last_read_message_id")
+    private Long lastReadMessageId;
+
+    @Column(name = "mention_count")
+    private int mentionCount = 0;
+
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/model/entity/ChannelMessage.java">
+package com.RR.DisSpeak.model.entity;
+
+import com.RR.DisSpeak.config.Status;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@Entity
+@Table(name = "channel_messages")
+public class ChannelMessage {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
+    private LocalDateTime timestamp ;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "channel_id")
+    private Channel channel;
+
+    @PrePersist
+    protected void onCreate() {
+        this.timestamp = LocalDateTime.now();
+    }
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/model/entity/PrivateChat.java">
+package com.RR.DisSpeak.model.entity;
+
+import com.RR.DisSpeak.config.Status;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@Entity
+@Table(name = "private_chats")
+public class PrivateChat {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @ManyToMany
+    @JoinTable(
+            name = "private_chat_members",
+            joinColumns = @JoinColumn(name = "chat_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> members;
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/model/entity/PrivateMessage.java">
+package com.RR.DisSpeak.model.entity;
+
+import com.RR.DisSpeak.config.Status;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@Entity
+@Table(name = "private_messages")
+public class PrivateMessage {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
+    private LocalDateTime timestamp;
+
+    @ManyToOne
+    @JoinColumn(name = "sender_id")
+    private User sender;
+
+    @ManyToOne
+    @JoinColumn(name = "chat_id")
+    private PrivateChat chat;
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/model/entity/Server.java">
+package com.RR.DisSpeak.model.entity;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@Entity
+@Table(name = "servers")
+public class Server {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private Long id;
+
+    @Column(name="name")
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+    //private String icon;
+
+    public Server(String name, User owner) {
+        this.name = name;
+        this.owner = owner;
+    }
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/model/entity/ServerMembers.java">
+package com.RR.DisSpeak.model.entity;
+
+import com.RR.DisSpeak.model.entity.enums.Role;
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Data
+@Entity
+@Table(name = "server_members")
+public class ServerMembers {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "server_id")
+    private Server server;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
+    @Enumerated(EnumType.STRING)
+    private Role role; // ADMIN, MEMBER, MODERATOR
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/repository/ChannelMemberStateRepository.java">
+package com.RR.DisSpeak.repository;
+
+import com.RR.DisSpeak.model.entity.ChannelMemberState;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ChannelMemberStateRepository extends JpaRepository<ChannelMemberState, Long> {
+     ChannelMemberState findByChannelIdAndUserId(int channelId, int userId);
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/repository/ChannelMessageRepository.java">
+package com.RR.DisSpeak.repository;
+
+import com.RR.DisSpeak.model.entity.ChannelMessage;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+
+public interface ChannelMessageRepository extends JpaRepository<ChannelMessage, Long> {
+    @Query("SELECT cm FROM ChannelMessage cm WHERE cm.channel.id = :channelId ORDER BY cm.timestamp DESC")
+    List<ChannelMessage> findByChannelId(@Param("channelId") Long channelId);
+
+    @Query("SELECT cm FROM ChannelMessage cm WHERE cm.user.id = :userId ORDER BY cm.timestamp DESC")
+    List<ChannelMessage> findByUserId(@Param("userId") int userId);
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/repository/ChannelRepository.java">
+package com.RR.DisSpeak.repository;
+
+import com.RR.DisSpeak.model.entity.Channel;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ChannelRepository extends JpaRepository<Channel, Long> {
+     Channel findByName(String name);
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/repository/PrivateChatRepository.java">
+package com.RR.DisSpeak.repository;
+
+import com.RR.DisSpeak.model.entity.PrivateChat;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PrivateChatRepository extends JpaRepository<PrivateChat, Integer> {
+
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/repository/PrivateMessageRepository.java">
+package com.RR.DisSpeak.repository;
+
+import com.RR.DisSpeak.model.entity.PrivateMessage;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+
+public interface PrivateMessageRepository extends JpaRepository<PrivateMessage, Long> {
+    @Query("SELECT pm FROM PrivateMessage pm WHERE pm.chat.id = :chatId ORDER BY pm.timestamp DESC")
+    List<PrivateMessage> findByChatId(@Param("chatId") Long chatId);
+
+    @Query("SELECT pm FROM PrivateMessage pm WHERE pm.sender.id = :senderId ORDER BY pm.timestamp DESC")
+    List<PrivateMessage> findBySenderId(@Param("senderId") int senderId);
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/repository/ServerRepository.java">
+package com.RR.DisSpeak.repository;
+
+import com.RR.DisSpeak.model.entity.Server;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ServerRepository extends JpaRepository<Server, Long> {
+     Server findByName(String name);
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/service/ChannelMessageService.java">
+package com.RR.DisSpeak.service;
+
+import com.RR.DisSpeak.model.entity.ChannelMessage;
+import com.RR.DisSpeak.model.entity.Channel;
+import com.RR.DisSpeak.model.entity.User;
+import com.RR.DisSpeak.repository.ChannelMessageRepository;
+import com.RR.DisSpeak.repository.ChannelRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class ChannelMessageService extends MessageService {
+
+    @Autowired
+    private ChannelMessageRepository channelMessageRepository;
+
+    @Autowired
+    private ChannelRepository channelRepository;
+
+    /**
+     * Salva un nuovo messaggio di channel
+     */
+    @Override
+    public void saveMessage(Object message) {
+        if (message instanceof ChannelMessage) {
+            ChannelMessage cm = (ChannelMessage) message;
+            cm.setTimestamp(getCurrentTimestamp());
+            channelMessageRepository.save(cm);
+        }
+    }
+
+    /**
+     * Recupera un messaggio di channel per ID
+     */
+    @Override
+    public Object getMessageById(Long id) {
+        Optional<ChannelMessage> message = channelMessageRepository.findById(id);
+        return message.orElse(null);
+    }
+
+    /**
+     * Elimina un messaggio di channel (solo il proprietario o admin)
+     */
+    @Override
+    public void deleteMessage(Long id) {
+        if (channelMessageRepository.existsById(id)) {
+            channelMessageRepository.deleteById(id);
+        }
+    }
+
+    /**
+     * Aggiorna il contenuto di un messaggio di channel
+     */
+    @Override
+    public void updateMessage(Long id, String newContent) {
+        Optional<ChannelMessage> message = channelMessageRepository.findById(id);
+        if (message.isPresent()) {
+            ChannelMessage cm = message.get();
+            cm.setContent(newContent);
+            channelMessageRepository.save(cm);
+        }
+    }
+
+    /**
+     * Recupera tutti i messaggi di un channel
+     */
+    public List<ChannelMessage> getMessagesByChannel(Long channelId) {
+        return channelMessageRepository.findByChannelId(channelId);
+    }
+
+    /**
+     * Recupera tutti i messaggi inviati da un utente
+     */
+    public List<ChannelMessage> getMessagesByUser(int userId) {
+        return channelMessageRepository.findByUserId(userId);
+    }
+
+    /**
+     * Crea un nuovo messaggio di channel con i parametri specificati
+     */
+    public ChannelMessage createChannelMessage(String content, User user, Channel channel) {
+        ChannelMessage cm = new ChannelMessage();
+        cm.setContent(content);
+        cm.setUser(user);
+        cm.setChannel(channel);
+        cm.setTimestamp(getCurrentTimestamp());
+        return channelMessageRepository.save(cm);
+    }
+
+    /**
+     * Recupera gli ultimi N messaggi di un channel
+     */
+    public List<ChannelMessage> getLastMessagesFromChannel(Long channelId, int limit) {
+        List<ChannelMessage> messages = channelMessageRepository.findByChannelId(channelId);
+        return messages.stream().limit(limit).toList();
+    }
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/service/PrivateMessageService.java">
+package com.RR.DisSpeak.service;
+
+import com.RR.DisSpeak.model.entity.PrivateMessage;
+import com.RR.DisSpeak.model.entity.PrivateChat;
+import com.RR.DisSpeak.model.entity.User;
+import com.RR.DisSpeak.repository.PrivateMessageRepository;
+import com.RR.DisSpeak.repository.PrivateChatRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class PrivateMessageService extends MessageService {
+
+    @Autowired
+    private PrivateMessageRepository privateMessageRepository;
+
+    @Autowired
+    private PrivateChatRepository privateChatRepository;
+
+    /**
+     * Salva un nuovo messaggio privato
+     */
+    @Override
+    public void saveMessage(Object message) {
+        if (message instanceof PrivateMessage) {
+            PrivateMessage pm = (PrivateMessage) message;
+            pm.setTimestamp(getCurrentTimestamp());
+            privateMessageRepository.save(pm);
+        }
+    }
+
+    /**
+     * Recupera un messaggio privato per ID
+     */
+    @Override
+    public Object getMessageById(Long id) {
+        Optional<PrivateMessage> message = privateMessageRepository.findById(id);
+        return message.orElse(null);
+    }
+
+    /**
+     * Elimina un messaggio privato (solo il proprietario può farlo)
+     */
+    @Override
+    public void deleteMessage(Long id) {
+        if (privateMessageRepository.existsById(id)) {
+            privateMessageRepository.deleteById(id);
+        }
+    }
+
+    /**
+     * Aggiorna il contenuto di un messaggio privato
+     */
+    @Override
+    public void updateMessage(Long id, String newContent) {
+        Optional<PrivateMessage> message = privateMessageRepository.findById(id);
+        if (message.isPresent()) {
+            PrivateMessage pm = message.get();
+            pm.setContent(newContent);
+            privateMessageRepository.save(pm);
+        }
+    }
+
+    /**
+     * Recupera tutti i messaggi di una chat privata
+     */
+    public List<PrivateMessage> getMessagesByChat(Long chatId) {
+        return privateMessageRepository.findByChatId(chatId);
+    }
+
+    /**
+     * Recupera tutti i messaggi inviati da un utente
+     */
+    public List<PrivateMessage> getMessagesBySender(int senderId) {
+        return privateMessageRepository.findBySenderId(senderId);
+    }
+
+    /**
+     * Crea un nuovo messaggio privato con i parametri specificati
+     */
+    public PrivateMessage createPrivateMessage(String content, User sender, PrivateChat chat) {
+        PrivateMessage pm = new PrivateMessage();
+        pm.setContent(content);
+        pm.setSender(sender);
+        pm.setChat(chat);
+        pm.setTimestamp(getCurrentTimestamp());
+        return privateMessageRepository.save(pm);
+    }
+}
+</file>
+
+<file path="backend/src/main/resources/application.properties">
+spring.application.name=DisSpeak
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/disspeakdb
+spring.datasource.username=postgres
+spring.datasource.password=Firenze1
+spring.jpa.hibernate.ddl-auto=update
+</file>
+
+<file path="backend/src/main/resources/templates/index.html">
+
+</file>
+
+<file path="backend/src/test/java/com/RR/DisSpeak/DisSpeakApplicationTests.java">
+package com.RR.DisSpeak;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class DisSpeakApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
+</file>
+
+<file path="frontend/.env">
+DANGEROUSLY_DISABLE_HOST_CHECK=true
+BROWSER=none
+WDS_SOCKET_PORT=0
+ALLOWED_HOSTS=localhost
+</file>
+
+<file path="frontend/.gitignore">
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+</file>
+
+<file path="frontend/public/index.html">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
+</file>
+
+<file path="frontend/public/manifest.json">
+{
+  "short_name": "React App",
+  "name": "Create React App Sample",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
+</file>
+
+<file path="frontend/public/robots.txt">
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow:
+</file>
+
+<file path="frontend/README.md">
+# Getting Started with Create React App
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Available Scripts
+
+In the project directory, you can run:
+
+### `npm start`
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
+
+### `npm test`
+
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm run build`
+
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+</file>
+
+<file path="frontend/src/App.css">
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</file>
+
+<file path="frontend/src/App.jsx">
+import React, { useState, useEffect } from 'react';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+
+export default function App() {
+    const [user, setUser] = useState(null);
+
+    // Al caricamento iniziale dell'app, controlla se l'utente era già loggato
+    useEffect(() => {
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+            try {
+                setUser(JSON.parse(savedUser));
+            } catch (e) {
+                localStorage.removeItem('user');
+            }
+        }
+    }, []);
+
+    const handleLoginSuccess = (loggedInUser) => {
+        setUser(loggedInUser);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        setUser(null);
+    };
+
+    // Se l'utente NON è loggato, mostra la pagina di Login
+    if (!user) {
+        return <Login onLoginSuccess={handleLoginSuccess} />;
+    }
+
+    // Se l'utente è autenticato, mostra la Dashboard
+    return <Dashboard user={user} onLogout={handleLogout} />;
+}
+</file>
+
+<file path="frontend/src/App.test.js">
+import { render, screen } from '@testing-library/react';
+import App from './App';
+
+test('renders learn react link', () => {
+  render(<App />);
+  const linkElement = screen.getByText(/learn react/i);
+  expect(linkElement).toBeInTheDocument();
+});
+</file>
+
+<file path="frontend/src/components/auth/Login.jsx">
+
+</file>
+
+<file path="frontend/src/components/auth/Register.jsx">
+
+</file>
+
+<file path="frontend/src/components/chat/MessageInput.jsx">
+
+</file>
+
+<file path="frontend/src/components/chat/MessageItem.jsx">
+
+</file>
+
+<file path="frontend/src/components/chat/MessageList.jsx">
+
+</file>
+
+<file path="frontend/src/components/layout/ChatArea.jsx">
+import React, { useState, useEffect, useRef } from 'react';
+import webSocketService from '../services/websocket';
+import { messageApi } from '../services/api';
+import MessageList from './chat/MessageList';
+import MessageInput from './chat/MessageInput';
+
+function ChatArea({ channel, currentUser }) {
+    const [messages, setMessages] = useState([]);
+
+    useEffect(() => {
+        if (!channel) return;
+
+        // carica messaggi storici dal DB via REST
+        messageApi.getByChannel(channel.id)
+            .then(res => setMessages(res.data))
+            .catch(err => console.error(err));
+
+        // iscriviti ai nuovi messaggi via WebSocket
+        webSocketService.subscribeToChannel(
+            channel.id,
+            (newMessage) => {
+                setMessages(prev => [...prev, newMessage]);
+            }
+        );
+    }, [channel]); // si riesegue ogni volta che cambia canale
+
+    const handleSend = (content) => {
+        webSocketService.sendMessage(channel.id, {
+            sender: currentUser.username,
+            content: content
+        });
+    };
+
+    return (
+        <div className="chat-area">
+            <h2># {channel?.name}</h2>
+            <MessageList messages={messages} />
+            <MessageInput onSend={handleSend} />
+        </div>
+    );
+}
+
+export default ChatArea;
+</file>
+
+<file path="frontend/src/components/layout/Sidebar.jsx">
+
+</file>
+
+<file path="frontend/src/components/layout/UserPanel.jsx">
+
+</file>
+
+<file path="frontend/src/context/AuthContext.JSX">
+
+</file>
+
+<file path="frontend/src/context/ChatContext.jsx">
+
+</file>
+
+<file path="frontend/src/index.css">
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+</file>
+
+<file path="frontend/src/logo.svg">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 841.9 595.3"><g fill="#61DAFB"><path d="M666.3 296.5c0-32.5-40.7-63.3-103.1-82.4 14.4-63.6 8-114.2-20.2-130.4-6.5-3.8-14.1-5.6-22.4-5.6v22.3c4.6 0 8.3.9 11.4 2.6 13.6 7.8 19.5 37.5 14.9 75.7-1.1 9.4-2.9 19.3-5.1 29.4-19.6-4.8-41-8.5-63.5-10.9-13.5-18.5-27.5-35.3-41.6-50 32.6-30.3 63.2-46.9 84-46.9V78c-27.5 0-63.5 19.6-99.9 53.6-36.4-33.8-72.4-53.2-99.9-53.2v22.3c20.7 0 51.4 16.5 84 46.6-14 14.7-28 31.4-41.3 49.9-22.6 2.4-44 6.1-63.6 11-2.3-10-4-19.7-5.2-29-4.7-38.2 1.1-67.9 14.6-75.8 3-1.8 6.9-2.6 11.5-2.6V78.5c-8.4 0-16 1.8-22.6 5.6-28.1 16.2-34.4 66.7-19.9 130.1-62.2 19.2-102.7 49.9-102.7 82.3 0 32.5 40.7 63.3 103.1 82.4-14.4 63.6-8 114.2 20.2 130.4 6.5 3.8 14.1 5.6 22.5 5.6 27.5 0 63.5-19.6 99.9-53.6 36.4 33.8 72.4 53.2 99.9 53.2 8.4 0 16-1.8 22.6-5.6 28.1-16.2 34.4-66.7 19.9-130.1 62-19.1 102.5-49.9 102.5-82.3zm-130.2-66.7c-3.7 12.9-8.3 26.2-13.5 39.5-4.1-8-8.4-16-13.1-24-4.6-8-9.5-15.8-14.4-23.4 14.2 2.1 27.9 4.7 41 7.9zm-45.8 106.5c-7.8 13.5-15.8 26.3-24.1 38.2-14.9 1.3-30 2-45.2 2-15.1 0-30.2-.7-45-1.9-8.3-11.9-16.4-24.6-24.2-38-7.6-13.1-14.5-26.4-20.8-39.8 6.2-13.4 13.2-26.8 20.7-39.9 7.8-13.5 15.8-26.3 24.1-38.2 14.9-1.3 30-2 45.2-2 15.1 0 30.2.7 45 1.9 8.3 11.9 16.4 24.6 24.2 38 7.6 13.1 14.5 26.4 20.8 39.8-6.3 13.4-13.2 26.8-20.7 39.9zm32.3-13c5.4 13.4 10 26.8 13.8 39.8-13.1 3.2-26.9 5.9-41.2 8 4.9-7.7 9.8-15.6 14.4-23.7 4.6-8 8.9-16.1 13-24.1zM421.2 430c-9.3-9.6-18.6-20.3-27.8-32 9 .4 18.2.7 27.5.7 9.4 0 18.7-.2 27.8-.7-9 11.7-18.3 22.4-27.5 32zm-74.4-58.9c-14.2-2.1-27.9-4.7-41-7.9 3.7-12.9 8.3-26.2 13.5-39.5 4.1 8 8.4 16 13.1 24 4.7 8 9.5 15.8 14.4 23.4zM420.7 163c9.3 9.6 18.6 20.3 27.8 32-9-.4-18.2-.7-27.5-.7-9.4 0-18.7.2-27.8.7 9-11.7 18.3-22.4 27.5-32zm-74 58.9c-4.9 7.7-9.8 15.6-14.4 23.7-4.6 8-8.9 16-13 24-5.4-13.4-10-26.8-13.8-39.8 13.1-3.1 26.9-5.8 41.2-7.9zm-90.5 125.2c-35.4-15.1-58.3-34.9-58.3-50.6 0-15.7 22.9-35.6 58.3-50.6 8.6-3.7 18-7 27.7-10.1 5.7 19.6 13.2 40 22.5 60.9-9.2 20.8-16.6 41.1-22.2 60.6-9.9-3.1-19.3-6.5-28-10.2zM310 490c-13.6-7.8-19.5-37.5-14.9-75.7 1.1-9.4 2.9-19.3 5.1-29.4 19.6 4.8 41 8.5 63.5 10.9 13.5 18.5 27.5 35.3 41.6 50-32.6 30.3-63.2 46.9-84 46.9-4.5-.1-8.3-1-11.3-2.7zm237.2-76.2c4.7 38.2-1.1 67.9-14.6 75.8-3 1.8-6.9 2.6-11.5 2.6-20.7 0-51.4-16.5-84-46.6 14-14.7 28-31.4 41.3-49.9 22.6-2.4 44-6.1 63.6-11 2.3 10.1 4.1 19.8 5.2 29.1zm38.5-66.7c-8.6 3.7-18 7-27.7 10.1-5.7-19.6-13.2-40-22.5-60.9 9.2-20.8 16.6-41.1 22.2-60.6 9.9 3.1 19.3 6.5 28.1 10.2 35.4 15.1 58.3 34.9 58.3 50.6-.1 15.7-23 35.6-58.4 50.6zM320.8 78.4z"/><circle cx="420.9" cy="296.5" r="45.7"/><path d="M520.5 78.1z"/></g></svg>
+</file>
+
+<file path="frontend/src/pages/Login.jsx">
+import React, { useState } from 'react';
+import { authApi } from '../services/api'; // <--- Usiamo Axios del tuo compagno
+
+export default function Login({ onLoginSuccess }) {
+    // true = Schermata Login, false = Schermata Registrazione
+    const [isLoginMode, setIsLoginMode] = useState(true);
+
+    // Stati per i campi del form
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+
+    // Stati per la gestione dell'interfaccia
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        try {
+            let response;
+
+            if (isLoginMode) {
+                // 1. FLUSSO LOGIN: invia solo username e password a /api/auth/login
+                response = await authApi.login({ username, password });
+            } else {
+                // 2. FLUSSO REGISTRAZIONE: invia tutti i dati a /api/auth/register
+                response = await authApi.register({ username, password, fullName, email });
+            }
+
+            const userLogged = response.data;
+
+            if (userLogged) {
+                console.log("Autenticazione riuscita:", userLogged);
+
+                // Salviamo l'utente nel browser per usarlo nelle altre schermate
+                localStorage.setItem('user', JSON.stringify(userLogged));
+
+                // Se il backend restituisce un token JWT, lo salviamo per gli interceptor di api.js
+                if (userLogged.token) {
+                    localStorage.setItem('token', userLogged.token);
+                }
+
+                // Avvisiamo App.jsx che l'utente è dentro!
+                onLoginSuccess(userLogged);
+            } else {
+                setError(isLoginMode ? 'Account non trovato o credenziali errate.' : 'Impossibile registrare l\'utente.');
+            }
+
+        } catch (err) {
+            console.error("Errore di autenticazione:", err);
+            // Se il server risponde con un errore (es. 400 Bad Request o 401 Unauthorized)
+            if (err.response && err.response.data) {
+                setError(isLoginMode ? 'Username o password errati.' : 'Dati di registrazione non validi (es. username già preso).');
+            } else {
+                setError('Impossibile raggiungere il server backend.');
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div style={styles.container}>
+            <div style={styles.card}>
+                <h2 style={styles.title}>DisSpeak</h2>
+                <p style={styles.subtitle}>
+                    {isLoginMode ? 'Bentornato! Accedi per chattare' : 'Crea un account in pochi secondi'}
+                </p>
+
+                {error && <div style={styles.error}>{error}</div>}
+
+                <form onSubmit={handleSubmit} style={styles.form}>
+                    <div style={styles.inputGroup}>
+                        <label style={styles.label}>Username</label>
+                        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required style={styles.input} />
+                    </div>
+
+                    {/* Mostra Nome Completo ed Email SOLO in modalità Registrazione */}
+                    {!isLoginMode && (
+                        <>
+                            <div style={styles.inputGroup}>
+                                <label style={styles.label}>Nome Completo</label>
+                                <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required style={styles.input} />
+                            </div>
+
+                            <div style={styles.inputGroup}>
+                                <label style={styles.label}>Email</label>
+                                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required style={styles.input} />
+                            </div>
+                        </>
+                    )}
+
+                    <div style={styles.inputGroup}>
+                        <label style={styles.label}>Password</label>
+                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required style={styles.input} />
+                    </div>
+
+                    <button type="submit" disabled={loading} style={styles.button}>
+                        {loading ? 'Attendi...' : (isLoginMode ? 'Accedi' : 'Registrati')}
+                    </button>
+                </form>
+
+                <p style={styles.toggleText}>
+                    {isLoginMode ? "Nuovo su DisSpeak? " : "Hai già un account? "}
+                    <span
+                        style={styles.toggleLink}
+                        onClick={() => {
+                            setIsLoginMode(!isLoginMode);
+                            setError(''); // Svuota gli errori nel cambio schermata
+                        }}
+                    >
+                        {isLoginMode ? 'Registrati qui' : 'Accedi qui'}
+                    </span>
+                </p>
+            </div>
+        </div>
+    );
+}
+
+// Design scuro personalizzato stile Discord
+const styles = {
+    container: { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#2f3136' },
+    card: { backgroundColor: '#36393f', padding: '40px', borderRadius: '8px', boxShadow: '0 4px 10px rgba(0,0,0,0.3)', width: '400px', color: '#fff', fontFamily: 'sans-serif' },
+    title: { textAlign: 'center', margin: '0 0 5px 0', fontSize: '28px', fontWeight: 'bold' },
+    subtitle: { textAlign: 'center', color: '#b9bbbe', marginBottom: '20px', fontSize: '14px' },
+    form: { display: 'flex', flexDirection: 'column' },
+    inputGroup: { display: 'flex', flexDirection: 'column', marginBottom: '15px' },
+    label: { fontSize: '12px', color: '#b9bbbe', textTransform: 'uppercase', fontWeight: 'bold', marginBottom: '5px' },
+    input: { padding: '10px', borderRadius: '3px', border: '1px solid #202225', backgroundColor: '#202225', color: '#fff', fontSize: '16px', outline: 'none' },
+    button: { padding: '12px', borderRadius: '3px', border: 'none', backgroundColor: '#5865F2', color: '#fff', fontWeight: 'bold', fontSize: '16px', cursor: 'pointer', marginTop: '10px' },
+    error: { backgroundColor: '#f04747', padding: '10px', borderRadius: '4px', color: '#fff', marginBottom: '15px', textAlign: 'center', fontSize: '14px' },
+    toggleText: { textAlign: 'center', color: '#b9bbbe', marginTop: '20px', fontSize: '14px' },
+    toggleLink: { color: '#00aff4', cursor: 'pointer', textDecoration: 'underline' }
+};
+</file>
+
+<file path="frontend/src/reportWebVitals.js">
+const reportWebVitals = onPerfEntry => {
+  if (onPerfEntry && onPerfEntry instanceof Function) {
+    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+      getCLS(onPerfEntry);
+      getFID(onPerfEntry);
+      getFCP(onPerfEntry);
+      getLCP(onPerfEntry);
+      getTTFB(onPerfEntry);
+    });
+  }
+};
+
+export default reportWebVitals;
+</file>
+
+<file path="frontend/src/services/api.js">
+import axios from 'axios';
+
+const api = axios.create({
+    baseURL: 'http://localhost:8080/api',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+
+// aggiungi automaticamente il token JWT ad ogni richiesta
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
+// chiamate autenticazione
+export const authApi = {
+    login: (credentials) => api.post('/auth/login', credentials),
+    register: (userData) => api.post('/auth/register', userData),
+};
+
+// chiamate server e canali
+export const serverApi = {
+    getAll: () => api.get('/servers'),
+    getById: (id) => api.get(`/servers/${id}`),
+    create: (data) => api.post('/servers', data),
+};
+
+export const channelApi = {
+    getByServer: (serverId) => api.get(`/servers/${serverId}/channels`),
+    create: (serverId, data) => api.post(`/servers/${serverId}/channels`, data),
+};
+
+// chiamate messaggi
+export const messageApi = {
+    getByChannel: (channelId) => api.get(`/channels/${channelId}/messages`),
+};
+
+export default api;
+</file>
+
+<file path="frontend/src/services/websocket.js">
+import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
+
+class WebSocketService {
+    constructor() {
+        this.client = null;
+        this.subscriptions = {};
+    }
+
+    // connessione al server
+    connect(onConnected) {
+        this.client = new Client({
+            webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
+            onConnect: () => {
+                console.log('WebSocket connesso!');
+                onConnected();
+            },
+            onDisconnect: () => {
+                console.log('WebSocket disconnesso');
+            }
+        });
+
+        this.client.activate();
+    }
+
+    // iscrizione a un canale
+    subscribeToChannel(channelId, onMessage) {
+        // cancella sottoscrizione precedente se esiste
+        if (this.subscriptions[channelId]) {
+            this.subscriptions[channelId].unsubscribe();
+        }
+
+        this.subscriptions[channelId] = this.client.subscribe(
+            `/topic/channel/${channelId}`,
+            (message) => {
+                onMessage(JSON.parse(message.body));
+            }
+        );
+    }
+
+    // invio messaggio
+    sendMessage(channelId, message) {
+        this.client.publish({
+            destination: `/app/channel/${channelId}/send`,
+            body: JSON.stringify(message)
+        });
+    }
+
+    // disconnessione
+    disconnect() {
+        if (this.client) {
+            this.client.deactivate();
+        }
+    }
+}
+
+// esportiamo una singola istanza condivisa
+export default new WebSocketService();
+</file>
+
+<file path="frontend/src/setupTests.js">
+// jest-dom adds custom jest matchers for asserting on DOM nodes.
+// allows you to do things like:
+// expect(element).toHaveTextContent(/react/i)
+// learn more: https://github.com/testing-library/jest-dom
+import '@testing-library/jest-dom';
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/config/WebSocketsConfig.java">
+package com.RR.DisSpeak.config;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.converter.DefaultContentTypeResolver;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.converter.MessageConverter;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.util.MimeTypeUtils;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+import java.util.List;
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebSocketsConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry){
+        registry.enableSimpleBroker("/user", "/online", "/public");
+        registry.setApplicationDestinationPrefixes("/app");
+        registry.setUserDestinationPrefix("/user");
+    }
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws");
+        registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
+    }
+
+    @Override
+    public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
+        DefaultContentTypeResolver resolver = new DefaultContentTypeResolver();
+        resolver.setDefaultMimeType(MimeTypeUtils.APPLICATION_JSON);
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+        converter.setObjectMapper(new ObjectMapper());
+        converter.setContentTypeResolver(resolver);
+        messageConverters.add(converter);
+        return false;
+    }
+
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/controller/PageController.java">
+package com.RR.DisSpeak.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class PageController {
+    @GetMapping("/home")
+    public String home() {
+        return "home";
+    }
+
+    @GetMapping("/servers")
+    public String servers() {
+        return "servers";
+    }
+
+    @GetMapping("/channels")
+    public String channels() {
+        return "channels";
+    }
+
+    @GetMapping("/messages")
+    public String messages() {
+        return "messages";
+    }
+
+    @GetMapping("/login")
+    public String login() {return "login";}
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/dto/SignInDto.java">
+package com.RR.DisSpeak.dto;
+
+import lombok.Data;
+
+@Data
+public class SignInDto {
+    private String username;
+    private String email;
+    private String fullName;
+    private String password;
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/model/entity/User.java">
+package com.RR.DisSpeak.model.entity;
+
+import com.RR.DisSpeak.config.Status;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@Entity
+@Table(name = "users")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private Long id;
+
+    @Column(name="username")
+    private String username;
+
+    @Column(name="email")
+    private String email;
+
+    @Column(name="password")
+    private String password;
+
+    @Column(name="full_name")
+    private String fullName;
+
+    @Column(name="status")
+    private Status status;
+
+    public User(String username,String password, String fullName, String email , Status status) {
+        this.username   = username;
+        this.password   = password;
+        this.fullName   = fullName;
+        this.email      = email;
+        this.status     = status;
+    }
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/service/MessageService.java">
+package com.RR.DisSpeak.service;
+
+import java.time.LocalDateTime;
+
+public abstract class MessageService {
+
+    /**
+     * Salva un nuovo messaggio
+     */
+    public abstract void saveMessage(Object message);
+
+    /**
+     * Recupera un messaggio per ID
+     */
+    public abstract Object getMessageById(Long id);
+
+    /**
+     * Elimina un messaggio
+     */
+    public abstract void deleteMessage(Long id);
+
+    /**
+     * Aggiorna un messaggio
+     */
+    public abstract void updateMessage(Long id, String newContent);
+
+    /**
+     * Metodo helper per impostare il timestamp
+     */
+    protected LocalDateTime getCurrentTimestamp() {
+        return LocalDateTime.now();
+    }
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/service/UserService.java">
+package com.RR.DisSpeak.service;
+
+import com.RR.DisSpeak.config.Status;
+import com.RR.DisSpeak.dto.SignInDto;
+import com.RR.DisSpeak.model.entity.User;
+import com.RR.DisSpeak.repository.UserRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class UserService {
+    private UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public User connect(User user) {
+        Optional<User> checkUser = userRepository.findById(Math.toIntExact(user.getId()));
+        if (checkUser.isPresent()) {
+            User storedUser = checkUser.get();
+            storedUser.setStatus(Status.ONLINE);
+            return userRepository.save(storedUser);
+        }
+        return null;
+    }
+
+    public User disconnect(User user) {
+        Optional<User> checkUser = userRepository.findById(Math.toIntExact(user.getId()));
+        if (checkUser.isPresent()) {
+            User storedUser = checkUser.get();
+            storedUser.setStatus(Status.OFFLINE);
+            return userRepository.save(storedUser);
+        }
+        return null;
+    }
+
+    public List<User> getConnectedUsers() {
+        return userRepository.findByStatus(Status.ONLINE);
+    }
+
+    public User loadUser(SignInDto signInDto) {
+        User returnedUser = null;
+        Optional<User> checkUser = userRepository.findByUsernameAndPassword(signInDto.getUsername(), signInDto.getPassword());
+        if (checkUser.isPresent()) {
+            returnedUser = checkUser.get();
+            return returnedUser;
+        }
+        return null;
+    }
+
+    public User registerUser(SignInDto signInDto) {
+        return userRepository.save(new User(
+                signInDto.getUsername(),
+                signInDto.getPassword(),
+                signInDto.getFullName(),
+                signInDto.getEmail(),
+                Status.OFFLINE
+        ));
+    }
+
+    public User find(int id) {
+        Optional<User> checkUser = userRepository.findById(id);
+        if (checkUser.isPresent()) {
+            return checkUser.get();
+        }
+        return null;
+    }
+
+}
+</file>
+
+<file path="frontend/package.json">
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@stomp/stompjs": "^7.3.0",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.15.2",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-scripts": "^5.0.1",
+    "sockjs-client": "^1.6.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "proxy": "http://localhost:8080"
+}
+</file>
+
+<file path="backend/src/main/java/com/RR/DisSpeak/repository/UserRepository.java">
+package com.RR.DisSpeak.repository;
+
+import com.RR.DisSpeak.config.Status;
+import com.RR.DisSpeak.model.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+    List<User> findByStatus(Status status);
+
+    Optional<User> findByUsername(String username);
+    Optional<User> findByUsernameAndPassword(String username, String password);
+    Optional<User> findByIdAndStatus(int id, Status status);
+    Optional<User> findById(Long id);
+}
+</file>
+
+</files>
