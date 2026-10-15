@@ -18,6 +18,7 @@ public class UserController {
 
     private final ServerService serverService;
 
+    /** Restituisce i server a cui l'utente specificato è iscritto. */
     @GetMapping("/{userId}/servers")
     public ResponseEntity<List<Server>> getUserServers(@PathVariable Long userId) {
         return ResponseEntity.ok(serverService.getServersByUserId(userId));

@@ -15,6 +15,7 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
+    /** Verifica le credenziali, marca l'utente online e restituisce il suo profilo. */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody SignInDto Sigin) {
         User user = userService.loadUser(Sigin);
@@ -24,6 +25,7 @@ public class AuthenticationController {
         }else return ResponseEntity.badRequest().build();
     }
 
+    /** Registra l'utente, lo marca online e restituisce il profilo creato. */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody SignInDto register) {
         User user = userService.registerUser(register);
@@ -32,4 +34,3 @@ public class AuthenticationController {
     }
 
 }
-

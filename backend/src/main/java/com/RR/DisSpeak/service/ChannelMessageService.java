@@ -28,9 +28,7 @@ public class ChannelMessageService extends MessageService {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    /**
-     * Salva un nuovo messaggio di channel
-     */
+    /** Imposta l'ora corrente e salva il messaggio se è un messaggio di canale. */
     @Override
     public void saveMessage(Object message) {
         if (message instanceof ChannelMessage) {
@@ -40,18 +38,14 @@ public class ChannelMessageService extends MessageService {
         }
     }
 
-    /**
-     * Recupera un messaggio di channel per ID
-     */
+    /** Cerca un messaggio di canale tramite ID e restituisce null se non esiste. */
     @Override
     public Object getMessageById(Long id) {
         Optional<ChannelMessage> message = channelMessageRepository.findById(id);
         return message.orElse(null);
     }
 
-    /**
-     * Elimina un messaggio di channel (solo il proprietario o admin)
-     */
+    /** Elimina il messaggio con l'ID indicato, se presente. */
     @Override
     public void deleteMessage(Long id) {
         if (channelMessageRepository.existsById(id)) {
@@ -59,9 +53,7 @@ public class ChannelMessageService extends MessageService {
         }
     }
 
-    /**
-     * Aggiorna il contenuto di un messaggio di channel
-     */
+    /** Sostituisce il contenuto del messaggio indicato, se presente. */
     @Override
     public void updateMessage(Long id, String newContent) {
         Optional<ChannelMessage> message = channelMessageRepository.findById(id);
@@ -72,23 +64,17 @@ public class ChannelMessageService extends MessageService {
         }
     }
 
-    /**
-     * Recupera tutti i messaggi di un channel
-     */
+    /** Recupera tutti i messaggi appartenenti al canale indicato. */
     public List<ChannelMessage> getMessagesByChannel(Long channelId) {
         return channelMessageRepository.findByChannelId(channelId);
     }
 
-    /**
-     * Recupera tutti i messaggi inviati da un utente
-     */
+    /** Recupera tutti i messaggi inviati dall'utente indicato. */
     public List<ChannelMessage> getMessagesByUser(int userId) {
         return channelMessageRepository.findByUserId(userId);
     }
 
-    /**
-     * Crea un nuovo messaggio di channel con i parametri specificati
-     */
+    /** Crea e salva un messaggio con il contenuto, l'autore e il canale specificati. */
     public ChannelMessage createChannelMessage(String content, User user, Channel channel) {
         ChannelMessage cm = new ChannelMessage();
         cm.setContent(content);
@@ -98,18 +84,18 @@ public class ChannelMessageService extends MessageService {
         return channelMessageRepository.save(cm);
     }
 
-    /**
-     * Recupera gli ultimi N messaggi di un channel
-     */
+    /** Restituisce al massimo il numero di messaggi indicato per il canale. */
     public List<ChannelMessage> getLastMessagesFromChannel(Long channelId, int limit) {
         List<ChannelMessage> messages = channelMessageRepository.findByChannelId(channelId);
         return messages.stream().limit(limit).toList();
     }
 
+    /** Recupera i messaggi del canale, usato dal controller per mostrarne la cronologia. */
     public List<ChannelMessage> getMessagesForChannel(Long channelId) {
         return channelMessageRepository.findByChannelId(channelId);
     }
 
+    /** Crea, salva e pubblica in tempo reale un messaggio sul canale indicato. */
     public ChannelMessage sendMessage(Long channelId, String content, Long userId) {
         Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new RuntimeException("Canale non trovato: " + channelId));

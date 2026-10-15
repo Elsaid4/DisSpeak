@@ -16,11 +16,13 @@ public class MessageController {
 
     private final ChannelMessageService messageService;
 
+    /** Restituisce la cronologia dei messaggi del canale specificato. */
     @GetMapping("/{channelId}/messages")
     public ResponseEntity<List<ChannelMessage>> getChannelMessages(@PathVariable Long channelId) {
         return ResponseEntity.ok(messageService.getMessagesForChannel(channelId));
     }
 
+    /** Invia un messaggio al canale e restituisce il messaggio salvato. */
     @PostMapping("/{channelId}/messages")
     public ResponseEntity<ChannelMessage> sendMessage(
             @PathVariable Long channelId,

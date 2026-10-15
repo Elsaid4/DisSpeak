@@ -27,6 +27,7 @@ public class ServerService {
     private final ServerMembersRepository serverMembersRepository;
     private final ChannelRepository channelRepository;
 
+    /** Crea un server, assegna il creatore come amministratore e aggiunge il canale generale. */
     @Transactional
     public Server createServer(CreateServerDto request) {
         // 1. Verfica esistenza dell'utente proprietario
@@ -61,12 +62,14 @@ public class ServerService {
         return savedServer;
     }
 
+    /** Recupera i server a cui l'utente indicato risulta iscritto. */
     public List<Server> getServersByUserId(Long userId) {
         return serverMembersRepository.findAllByUserId(userId).stream()
                 .map(ServerMembers::getServer)
                 .toList();
     }
 
+    /** Cerca server per nome ignorando maiuscole/minuscole ed esclude quelli già frequentati dall'utente. */
     public List<Server> searchServers(String query, Long userId) {
         if (query == null || query.isBlank()) {
             return List.of();
@@ -84,6 +87,7 @@ public class ServerService {
                 .toList();
     }
 
+    /** Aggiunge l'utente al server come membro, senza duplicare un'iscrizione esistente. */
     @Transactional
     public Server joinServer(Long serverId, Long userId) {
         Server server = serverRepository.findById(serverId)

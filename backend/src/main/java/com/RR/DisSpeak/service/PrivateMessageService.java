@@ -20,9 +20,7 @@ public class PrivateMessageService extends MessageService {
     @Autowired
     private PrivateChatRepository privateChatRepository;
 
-    /**
-     * Salva un nuovo messaggio privato
-     */
+    /** Imposta l'ora corrente e salva il messaggio se è un messaggio privato. */
     @Override
     public void saveMessage(Object message) {
         if (message instanceof PrivateMessage) {
@@ -32,18 +30,14 @@ public class PrivateMessageService extends MessageService {
         }
     }
 
-    /**
-     * Recupera un messaggio privato per ID
-     */
+    /** Cerca un messaggio privato tramite ID e restituisce null se non esiste. */
     @Override
     public Object getMessageById(Long id) {
         Optional<PrivateMessage> message = privateMessageRepository.findById(id);
         return message.orElse(null);
     }
 
-    /**
-     * Elimina un messaggio privato (solo il proprietario può farlo)
-     */
+    /** Elimina il messaggio privato con l'ID indicato, se presente. */
     @Override
     public void deleteMessage(Long id) {
         if (privateMessageRepository.existsById(id)) {
@@ -51,9 +45,7 @@ public class PrivateMessageService extends MessageService {
         }
     }
 
-    /**
-     * Aggiorna il contenuto di un messaggio privato
-     */
+    /** Sostituisce il contenuto del messaggio privato indicato, se presente. */
     @Override
     public void updateMessage(Long id, String newContent) {
         Optional<PrivateMessage> message = privateMessageRepository.findById(id);
@@ -64,23 +56,17 @@ public class PrivateMessageService extends MessageService {
         }
     }
 
-    /**
-     * Recupera tutti i messaggi di una chat privata
-     */
+    /** Recupera tutti i messaggi appartenenti alla chat privata indicata. */
     public List<PrivateMessage> getMessagesByChat(Long chatId) {
         return privateMessageRepository.findByChatId(chatId);
     }
 
-    /**
-     * Recupera tutti i messaggi inviati da un utente
-     */
+    /** Recupera tutti i messaggi inviati dall'utente indicato. */
     public List<PrivateMessage> getMessagesBySender(int senderId) {
         return privateMessageRepository.findBySenderId(senderId);
     }
 
-    /**
-     * Crea un nuovo messaggio privato con i parametri specificati
-     */
+    /** Crea e salva un messaggio privato con contenuto, mittente e chat specificati. */
     public PrivateMessage createPrivateMessage(String content, User sender, PrivateChat chat) {
         PrivateMessage pm = new PrivateMessage();
         pm.setContent(content);
@@ -90,4 +76,3 @@ public class PrivateMessageService extends MessageService {
         return privateMessageRepository.save(pm);
     }
 }
-

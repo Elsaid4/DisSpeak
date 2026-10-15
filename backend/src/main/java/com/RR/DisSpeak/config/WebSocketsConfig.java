@@ -16,6 +16,7 @@ import java.util.List;
 @EnableWebSocketMessageBroker
 public class WebSocketsConfig implements WebSocketMessageBrokerConfigurer {
 
+    /** Configura gli indirizzi STOMP per broker, applicazione e destinazioni utente. */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry){
         registry.enableSimpleBroker("/user", "/online", "/public");
@@ -23,12 +24,14 @@ public class WebSocketsConfig implements WebSocketMessageBrokerConfigurer {
         registry.setUserDestinationPrefix("/user");
     }
 
+    /** Registra gli endpoint WebSocket e abilita SockJS per la connessione di fallback. */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws");
         registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
     }
 
+    /** Aggiunge il convertitore JSON e mantiene attivi anche i convertitori predefiniti. */
     @Override
     public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
         DefaultContentTypeResolver resolver = new DefaultContentTypeResolver();

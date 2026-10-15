@@ -12,6 +12,7 @@ import java.util.List;
 public class ChannelService {
     private final ChannelRepository channelRepository;
 
+    /** Recupera i canali associati al server indicato. */
     public List<Channel> getChannelsByServerId(Long serverId) {
         return channelRepository.findByServer_Id(serverId);
     }

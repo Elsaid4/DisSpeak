@@ -13,10 +13,12 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
+    /** Inizializza il servizio con il repository degli utenti. */
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    /** Imposta online l'utente esistente e restituisce la versione salvata. */
     public User connect(User user) {
         if (user == null || user.getId() == null) {
             return null;
@@ -30,6 +32,7 @@ public class UserService {
         return null;
     }
 
+    /** Imposta offline l'utente esistente e restituisce la versione salvata. */
     public User disconnect(User user) {
         if (user == null || user.getId() == null) {
             return null;
@@ -43,10 +46,12 @@ public class UserService {
         return null;
     }
 
+    /** Restituisce gli utenti il cui stato risulta online. */
     public List<User> getConnectedUsers() {
         return userRepository.findByStatus(Status.ONLINE);
     }
 
+    /** Cerca un utente usando le credenziali ricevute, oppure restituisce null se non valido. */
     public User loadUser(SignInDto signInDto) {
         if (signInDto == null) {
             return null;
@@ -58,6 +63,7 @@ public class UserService {
         return null;
     }
 
+    /** Crea e salva un utente con i dati di registrazione e stato iniziale offline. */
     public User registerUser(SignInDto signInDto) {
         return userRepository.save(new User(
                 signInDto.getUsername(),
@@ -68,6 +74,7 @@ public class UserService {
         ));
     }
 
+    /** Cerca un utente tramite ID e restituisce null se l'ID è nullo o non trovato. */
     public User find(Long id) {
         if (id == null) {
             return null;

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class DisSpeakController {
 
+    /** Restituisce un messaggio di benvenuto per verificare la disponibilità dell'API. */
     @GetMapping("/hello")
     public String sayHello() {
         return "{\"message\": \"Ciao dal Backend!\"}";

@@ -4,29 +4,19 @@ import java.time.LocalDateTime;
 
 public abstract class MessageService {
 
-    /**
-     * Salva un nuovo messaggio
-     */
+    /** Salva un messaggio; l'implementazione definisce il tipo di messaggio supportato. */
     public abstract void saveMessage(Object message);
 
-    /**
-     * Recupera un messaggio per ID
-     */
+    /** Recupera un messaggio tramite ID, oppure null se non esiste. */
     public abstract Object getMessageById(Long id);
 
-    /**
-     * Elimina un messaggio
-     */
+    /** Elimina il messaggio identificato dall'ID. */
     public abstract void deleteMessage(Long id);
 
-    /**
-     * Aggiorna un messaggio
-     */
+    /** Aggiorna il contenuto del messaggio identificato dall'ID. */
     public abstract void updateMessage(Long id, String newContent);
 
-    /**
-     * Metodo helper per impostare il timestamp
-     */
+    /** Restituisce l'ora corrente per assegnarla ai messaggi. */
     protected LocalDateTime getCurrentTimestamp() {
         return LocalDateTime.now();
     }
