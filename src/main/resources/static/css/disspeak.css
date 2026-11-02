@@ -1,0 +1,180 @@
+/* DisSpeak - stile della dashboard. Bootstrap fornisce form, bottoni e modale;
+   qui c'è solo ciò che è specifico dell'applicazione. */
+
+:root {
+    --ds-ink: #1b2236;
+    --ds-rail: #1b2236;
+    --ds-panel: #eef2f7;
+    --ds-surface: #ffffff;
+    --ds-line: #d9e0ea;
+    --ds-muted: #5d6779;
+    --ds-accent: #0b7a75;
+    --ds-accent-soft: #d5ece9;
+    --ds-font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+html, body.ds-app {
+    height: 100%;
+    margin: 0;
+    font-family: var(--ds-font);
+    color: var(--ds-ink);
+    background: var(--ds-surface);
+}
+
+/* Struttura a quattro colonne: server | canali | chat | membri */
+.ds-shell {
+    display: grid;
+    grid-template-columns: 72px 260px minmax(0, 1fr) 240px;
+    height: 100vh;
+    height: 100dvh;
+}
+
+@media (max-width: 991.98px) {
+    .ds-shell { grid-template-columns: 72px 220px minmax(0, 1fr); }
+    .ds-members { display: none; }
+}
+
+@media (max-width: 575.98px) {
+    .ds-shell { grid-template-columns: 60px 150px minmax(0, 1fr); }
+}
+
+/* 1. Server */
+.ds-servers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 0;
+    background: var(--ds-rail);
+    overflow-y: auto;
+}
+
+.ds-server {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border: 0;
+    border-radius: 14px;
+    background: #2c3856;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: background-color .15s;
+}
+
+.ds-server:hover { background: #3a4870; color: #fff; }
+.ds-server.is-active { background: var(--ds-accent); }
+.ds-server.is-active::before {
+    content: "";
+    position: absolute;
+    left: -13px;
+    width: 4px;
+    height: 24px;
+    border-radius: 0 4px 4px 0;
+    background: #fff;
+}
+.ds-server-add { background: transparent; border: 2px dashed #5a6a92; font-size: 1.4rem; }
+
+/* 2. Canali */
+.ds-channels {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: var(--ds-panel);
+    border-right: 1px solid var(--ds-line);
+}
+
+.ds-panel-head {
+    padding: 16px;
+    border-bottom: 1px solid var(--ds-line);
+}
+.ds-panel-title { margin: 0; font-size: 1.05rem; font-weight: 600; overflow-wrap: anywhere; }
+
+.ds-channel-list { flex: 1; margin: 0; padding: 8px; list-style: none; overflow-y: auto; }
+
+.ds-channel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    color: var(--ds-muted);
+    text-decoration: none;
+}
+.ds-channel:hover { background: #e1e7ef; color: var(--ds-ink); }
+.ds-channel.is-active { background: var(--ds-accent-soft); color: var(--ds-ink); font-weight: 600; }
+.ds-channel-icon { width: 1ch; text-align: center; }
+
+.ds-userbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-top: 1px solid var(--ds-line);
+}
+.ds-userbar-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ds-userbar-exit { font-size: .875rem; color: var(--ds-muted); }
+
+/* 3. Chat */
+.ds-chat { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+
+.ds-chat-head { padding: 14px 20px; border-bottom: 1px solid var(--ds-line); }
+.ds-chat-title { margin: 0; font-size: 1.05rem; font-weight: 600; }
+
+.ds-messages { flex: 1; min-height: 0; padding: 16px 20px; overflow-y: auto; }
+
+.ds-message { display: flex; gap: 12px; margin-bottom: 14px; }
+.ds-message-meta { margin: 0 0 2px; font-size: .9rem; }
+.ds-message-meta time { margin-left: 6px; font-size: .78rem; color: var(--ds-muted); }
+.ds-message-body { margin: 0; max-width: 70ch; overflow-wrap: anywhere; }
+
+.ds-composer {
+    display: flex;
+    gap: 10px;
+    padding: 12px 20px 16px;
+    border-top: 1px solid var(--ds-line);
+}
+
+/* 4. Membri */
+.ds-members {
+    min-height: 0;
+    padding: 16px 12px;
+    background: var(--ds-panel);
+    border-left: 1px solid var(--ds-line);
+    overflow-y: auto;
+}
+.ds-side-title { margin: 0 0 10px 6px; font-size: .95rem; font-weight: 600; color: var(--ds-muted); }
+.ds-member-list { margin: 0; padding: 0; list-style: none; }
+.ds-member { display: flex; align-items: center; gap: 8px; padding: 6px; }
+.ds-member-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ds-role { font-size: .72rem; color: var(--ds-muted); }
+.ds-status { width: 9px; height: 9px; border-radius: 50%; background: #aab3c2; }
+.ds-status.is-online { background: #2f9e5b; }
+
+/* Elementi condivisi */
+.ds-avatar {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--ds-accent-soft);
+    color: var(--ds-accent);
+    font-weight: 600;
+}
+
+.ds-btn { background: var(--ds-accent); border-color: var(--ds-accent); color: #fff; }
+.ds-btn:hover { background: #09645f; border-color: #09645f; color: #fff; }
+
+.ds-empty { margin: 0; padding: 16px; color: var(--ds-muted); }
+.ds-empty-center { margin: auto; text-align: center; }
+
+:focus-visible { outline: 3px solid #f2b705; outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+}

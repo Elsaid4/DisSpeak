@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment/layout :: head('Dashboard')}"></head>
+
+<!--
+  Attributi del Model che questa pagina si aspetta (tutti opzionali):
+    servers, currentServer, channels, currentChannel, messages, members, currentUser
+  I nomi delle proprietà (c.type, m.user.username, ...) vanno adattati ai getter delle vostre entità.
+  th:text scrive il testo con escaping HTML: i messaggi degli utenti non possono iniettare codice.
+-->
+
+<body class="ds-app">
+<div class="ds-shell">
+
+    <!-- 1. Colonna dei server -->
+    <nav class="ds-servers" aria-label="Server">
+        <a th:each="s : ${servers}"
+           th:href="@{/dashboard(server=${s.id})}"
+           th:title="${s.name}"
+           th:attr="aria-label=${s.name}"
+           th:classappend="${currentServer != null and s.id == currentServer.id} ? 'is-active'"
+           th:text="${#strings.toUpperCase(#strings.substring(s.name, 0, 1))}"
+           class="ds-server">D</a>
+
+        <button type="button" class="ds-server ds-server-add"
+                data-bs-toggle="modal" data-bs-target="#createServerModal"
+                aria-label="Crea un server">+</button>
+    </nav>
+
+    <!-- 2. Canali del server selezionato -->
+    <aside class="ds-channels" aria-label="Canali">
+        <header class="ds-panel-head">
+            <h1 class="ds-panel-title"
+                th:text="${currentServer != null} ? ${currentServer.name} : 'Nessun server'">Nome server</h1>
+        </header>
+
+        <p class="ds-empty" th:if="${currentServer == null}">
+            Crea un server con il pulsante + per iniziare.
+        </p>
+
+        <ul class="ds-channel-list" th:if="${currentServer != null}">
+            <li th:each="c : ${channels}">
+                <a class="ds-channel"
+                   th:href="@{/dashboard(server=${currentServer.id}, channel=${c.id})}"
+                   th:classappend="${currentChannel != null and c.id == currentChannel.id} ? 'is-active'">
+                    <span class="ds-channel-icon" aria-hidden="true"
+                          th:text="${c.type.name() == 'VOICE'} ? '~' : '#'">#</span>
+                    <span th:text="${c.name}">generale</span>
+                </a>
+            </li>
+        </ul>
+
+        <footer class="ds-userbar" th:if="${currentUser != null}">
+            <span class="ds-avatar" aria-hidden="true"
+                  th:text="${#strings.toUpperCase(#strings.substring(currentUser.username, 0, 1))}">U</span>
+            <span class="ds-userbar-name" th:text="${currentUser.username}">utente</span>
+            <a class="ds-userbar-exit" th:href="@{/logout}">Esci</a>
+        </footer>
+    </aside>
+
+    <!-- 3. Chat del canale selezionato -->
+    <main class="ds-chat">
+        <p class="ds-empty ds-empty-center" th:if="${currentChannel == null}">
+            Scegli un canale per leggere e scrivere messaggi.
+        </p>
+
+        <th:block th:if="${currentChannel != null}">
+            <header class="ds-chat-head">
+                <h2 class="ds-chat-title" th:text="'# ' + ${currentChannel.name}">canale</h2>
+            </header>
+
+            <div class="ds-messages" id="messageList" aria-live="polite">
+                <p class="ds-empty" th:if="${#lists.isEmpty(messages)}">
+                    Ancora nessun messaggio. Scrivi il primo.
+                </p>
+                <article class="ds-message" th:each="m : ${messages}">
+                    <span class="ds-avatar" aria-hidden="true"
+                          th:text="${#strings.toUpperCase(#strings.substring(m.user.username, 0, 1))}">U</span>
+                    <div>
+                        <p class="ds-message-meta">
+                            <strong th:text="${m.user.username}">utente</strong>
+                            <time th:text="${#temporals.format(m.timestamp, 'HH:mm')}">12:00</time>
+                        </p>
+                        <p class="ds-message-body" th:text="${m.content}">Testo del messaggio</p>
+                    </div>
+                </article>
+            </div>
+
+            <!-- L'invio in tempo reale (WebSocket) si collega qui in un secondo momento -->
+            <form class="ds-composer" id="messageForm" autocomplete="off">
+                <input type="text" class="form-control" id="messageInput" maxlength="2000"
+                       aria-label="Scrivi un messaggio"
+                       th:placeholder="'Scrivi in #' + ${currentChannel.name}">
+                <button type="submit" class="btn ds-btn">Invia</button>
+            </form>
+        </th:block>
+    </main>
+
+    <!-- 4. Membri del server -->
+    <aside class="ds-members" aria-label="Membri" th:if="${currentServer != null}">
+        <h2 class="ds-side-title">Membri</h2>
+        <ul class="ds-member-list">
+            <li class="ds-member" th:each="m : ${members}">
+                <span class="ds-status" aria-hidden="true"
+                      th:classappend="${m.user.status != null and m.user.status.name() == 'ONLINE'} ? 'is-online'"></span>
+                <span class="ds-member-name" th:text="${m.user.username}">utente</span>
+                <span class="ds-role" th:text="${m.role}">MEMBER</span>
+            </li>
+        </ul>
+    </aside>
+</div>
+
+<!-- Finestra per creare un server (Bootstrap modal) -->
+<div class="modal fade" id="createServerModal" tabindex="-1"
+     aria-labelledby="createServerTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form class="modal-content" th:action="@{/servers}" method="post">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="createServerTitle">Crea un server</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+            </div>
+            <div class="modal-body">
+                <label for="serverName" class="form-label">Nome del server</label>
+                <input type="text" class="form-control" id="serverName" name="name"
+                       required maxlength="50">
+                <p class="form-text">Verrà creato anche il canale #generale.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="submit" class="btn ds-btn">Crea server</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<th:block th:replace="~{fragment/layout :: scripts}"></th:block>
+<script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>
